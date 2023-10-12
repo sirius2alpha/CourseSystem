@@ -1,4 +1,6 @@
 # CourseSystem
+## 技术栈
+vue + axios + springboot + mysql
 ## 前端
 前端相关内容在文件夹frontend下，预览网页在/fronend下执行命令`npm run serve`就可以
 
@@ -24,3 +26,6 @@ users
 -   所有的用户来自于学生表和教师表
 -   登录密码都是123456,msg字段存储的是ID+‘123456’字符串的MD5摘要
 -   role值为1表示学生，2表示教师
+
+## git使用教程
+https://juejin.cn/post/7262179139897016380
