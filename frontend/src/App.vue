@@ -1,14 +1,14 @@
 <template>
-<IndexLogin/>  
+  <!-- 添加路由组件 -->
+  <router-view></router-view>
 </template>
 
 <script>
- import IndexLogin from "@/views/IndexLogin.vue"
 
 export default {
   name: 'App',
   components: {
-    IndexLogin
+    
   }
 }
 </script>

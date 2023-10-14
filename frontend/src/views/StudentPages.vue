@@ -18,8 +18,11 @@
       </aside>
 
       <div class="main-content-right">
+
+        <!-- 选课功能内容 -->
         <div v-if="selectedFunction === '选课'">
           <!-- 选课功能内容 -->
+
           <!-- 包括输入课程号、教师号、教师姓名的表单 -->
           <div class="input-row">
             <div class="input-group">
@@ -41,8 +44,43 @@
               <label for="TeacherName">教师姓名</label>
               <input type="text" id="TeacherName" v-model="TeacherName">
             </div>
+
+            <div class="input-group">
+              <label for="CourseTime">上课时间</label>
+              <input type="text" id="CourseTime" v-model="CourseTime">
+            </div>
+
+            <!--提交按钮-->
+            <input type="button" value="提交" @click="fetchCourses">
+
+
           </div>
 
+          <!--选课记录返回，用列表进行呈现-->
+
+          <!--展示查询到的选课信息-->
+          <form v-if="showForm">
+            <table class="course-table">
+              <tr>
+                <th>课程号</th>
+                <th>课程名</th>
+                <th>教师号</th>
+                <th>教师姓名</th>
+                <th>课程容量</th>
+                <th>已选人数</th>
+                <th>上课时间</th>
+              </tr>
+              <tr v-for="course in courseInfo" :key="course.course_id">
+                <td>{{ course.course_id }}</td>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.teacher_id }}</td>
+                <td>{{ course.teacher_name }}</td>
+                <td>{{ course.capacity }}</td>
+                <td>{{ course.selected_number }}</td>
+                <td>{{ course.time }}</td>
+              </tr>
+            </table>
+          </form>
 
 
         </div>
@@ -73,44 +111,66 @@ export default {
     return {
       userName: "用户名称", // 用户名，你可以从登录信息中获取
       selectedFunction: "选课", // 默认选中的功能
+      showForm: false, // 选课信息的表单点击选课查询之后才会显示
+
+      courseInfo: [{
+        "course_id": "course_id",
+        "course_name": "course_name",
+        "teacher_id": "teacher_id",
+        "teacher_name": "teacher_name",
+        "capacity": 0,
+        "selected_number": 0,
+        "time": "time"
+      }]
     };
   },
   methods: {
+    // 选择功能
     selectFunction(functionName) {
       this.selectedFunction = functionName;
     },
-    async selectCourses() {
-      const id = this.userId;
-      const course_id=this.CourseId;
-      const course_name=this.CourseName;
-      const teacher_id=this.TeacherId;
-      const teacher_name=this.TeacherName;
 
+    // 选课功能
+    async fetchCourses() {
+      // 把v-model数据保存到变量中
+      const id = this.userId;
+      const course_id = this.CourseId;
+      const course_name = this.CourseName;
+      const teacher_id = this.TeacherId;
+      const teacher_name = this.TeacherName;
+      const course_time = this.CourseTime;
+
+      // 构造请求体
       const apiUrl = `/api/students/${id}/courses`;
       const requestBody = {
         course_id,
         course_name,
         teacher_id,
-        teacher_name
+        teacher_name,
+        course_time
       };
 
       try {
         // 发送 POST 请求
         const response = await axios.post(apiUrl, requestBody);
-        console.log("登录成功", response.data);
-        // 处理登录成功后的逻辑
-        // 跳转到选课页面
-        this.$router.push("/course");
+        console.log("选课信息查询成功", response.data);
+        // 将查询选课的结果显示到页面上
 
-
-      } catch (error) {
-        console.error("登录失败", error);
-        // 处理登录失败后的逻辑
-        // 提示输入密码错误
-        alert("登录失败，请检查账号和密码是否正确");
+        // 用JSON.parse()方法将字符串转换为JSON对象
+        const courseData = JSON.parse(response.data);
+        this.courseInfo = courseData;
+        this.showForm = true; // 显示表单组件
 
       }
+      catch (error) {
+        console.error("选课信息查询失败", error);
+        alert("选课信息查询失败");
+      }
     },
+    mounted() {
+      this.fetchCourses();
+      this.showForm = false; // 隐藏表单组件
+    }
   },
 };
 </script>
@@ -187,6 +247,26 @@ input {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+}
+
+
+.course-table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  width: 100%;
+}
+
+.course-table th, .course-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.course-table th {
+  background-color: #8ac9e2;
+  color: white;
 }
 </style>
   

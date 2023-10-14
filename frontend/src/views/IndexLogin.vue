@@ -22,13 +22,15 @@
     </div>
     <!-- bind the method "login" on the input -->
     <input type="button" value="登录" @click="login">
-    <input type="button" value="学生页面" @click="student">
+    <input type="button" value="学生页面" @click="jumpStudents">
+    <router-link to="/students">学生页面</router-link>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import md5 from "md5";
+
 
 export default {
   // define a component
@@ -66,10 +68,9 @@ export default {
         console.log("登录成功", response.data);
         // 处理登录成功后的逻辑
         // 跳转到选课页面
-        this.$router.push("/course");
-
-
-      } catch (error) {
+        // this.$router.push("students");
+      } 
+      catch (error) {
         console.error("登录失败", error);
         // 处理登录失败后的逻辑
         // 提示输入密码错误
@@ -77,10 +78,10 @@ export default {
 
       }
     },
-    student() {
-      this.$router.push('/student');
+    
+    jumpStudents() {
+      this.$router.push('students');
     }
-
   },
 };
 </script>
@@ -121,6 +122,7 @@ export default {
   border-radius: 20px;
   background: #c8def1;
   margin: 10px;
+  padding-left: 15px;
 }
 
 .circle-icons {
