@@ -56,7 +56,7 @@ export default {
       // 使用 md5 对密码进行摘要处理
       const hashedPassword = md5(id + password);
 
-      const apiUrl = `/api/users/${id}/pwd`;
+      const apiUrl = `https://127.0.0.1:9000/api/users/${id}/pwd`;
       const requestBody = {
         id,
         msg: hashedPassword,
