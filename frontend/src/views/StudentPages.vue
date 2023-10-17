@@ -232,7 +232,7 @@ export default {
       const course_time = this.CourseTime;
 
       // 构造请求体
-      const apiUrl = `https://127.0.0.1:9000/api/courses`;
+      const apiUrl = `/api/courses`;
       const requestBody = {
         course_id,
         course_name,
@@ -263,7 +263,7 @@ export default {
     async fetchCourses() {
 
       // 构造请求体
-      const apiUrl = `https://127.0.0.1:9000/api/students/${this.userId}/courses`;
+      const apiUrl = `/api/students/${this.userId}/courses`;
 
       try {
         // 发送 GET 请求
@@ -302,7 +302,7 @@ export default {
           });
         });
 
-        const apiUrl = `https://127.0.0.1:9000/api/students/${this.userId}/courses`;
+        const apiUrl = `/api/students/${this.userId}/courses`;
         const response = await axios.post(apiUrl, requestBody);
 
         const result = JSON.parse(response.data);
@@ -336,7 +336,7 @@ export default {
           });
         });
 
-        const apiUrl = `https://127.0.0.1:9000/api/students/${this.userId}/courses`;
+        const apiUrl = `/api/students/${this.userId}/courses`;
         const response = await axios.delete(apiUrl, requestBody);
 
         const result = JSON.parse(response.data);
