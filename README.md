@@ -1,6 +1,7 @@
 # CourseSystem
 ## 技术栈
 vue + axios + springboot + mysql
+
 ## 前端
 前端相关内容在文件夹frontend下
 确保在电脑上已经安装node.js和npm
