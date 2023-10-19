@@ -69,8 +69,12 @@ export default {
         const response = await axios.post(apiUrl, requestBody);
         console.log("登录成功", response.data);
         // 处理登录成功后的逻辑
-        // 跳转到选课页面
-        // this.$router.push("students");
+        if(response.data.role === 1){
+          this.$router.push('students');
+        }
+        else{
+          this.$router.push('teachers');
+        }
       } 
       catch (error) {
         console.error("登录失败", error);
