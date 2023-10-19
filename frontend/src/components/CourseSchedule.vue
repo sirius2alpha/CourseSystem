@@ -31,8 +31,7 @@ export default {
   props: {
     myCourses: {
       type: Array,
-      required: true,
-      
+      required: true, 
     }
   },
   data() {

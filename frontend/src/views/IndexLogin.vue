@@ -23,7 +23,8 @@
     <!-- bind the method "login" on the input -->
     <input type="button" value="登录" @click="login">
     <input type="button" value="学生页面" @click="jumpStudents">
-    <router-link to="/students">学生页面</router-link>
+    <input type="button" value="老师页面" @click="jumpTeachers">
+
   </div>
 </template>
 
@@ -44,6 +45,7 @@ export default {
     return {
       userId: "",
       password: "",
+      host:"https://127.0.0.1:9000",
     };
   },
 
@@ -56,7 +58,7 @@ export default {
       // 使用 md5 对密码进行摘要处理
       const hashedPassword = md5(id + password);
 
-      const apiUrl = `https://127.0.0.1:9000/api/users/${id}/pwd`;
+      const apiUrl = `${this.host}/api/users/${id}/pwd`;
       const requestBody = {
         id,
         msg: hashedPassword,
@@ -81,6 +83,10 @@ export default {
     
     jumpStudents() {
       this.$router.push('students');
+    },
+
+    jumpTeachers(){
+      this.$router.push('teachers');
     }
   },
 };
