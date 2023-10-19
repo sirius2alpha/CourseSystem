@@ -19,117 +19,22 @@
 
       <div class="main-content-right">
 
-        <!-- 选课功能内容 -->
         <div v-if="selectedFunction === '选课'">
-          <!-- 选课功能内容 -->
-
-          <!-- 包括输入课程号、教师号、教师姓名的表单 -->
-          <div class="input-row">
-            <div class="input-group">
-              <label for="CourseId">课程号</label>
-              <input type="number" id="CourseId" v-model="CourseId">
-            </div>
-
-            <div class="input-group">
-              <label for="CourseName">课程名</label>
-              <input type="text" id="CourseName" v-model="CourseName">
-            </div>
-
-            <div class="input-group">
-              <label for="TeacherId">教师号</label>
-              <input type="number" id="TeacherId" v-model="TeacherId">
-            </div>
-
-            <div class="input-group">
-              <label for="TeacherName">教师姓名</label>
-              <input type="text" id="TeacherName" v-model="TeacherName">
-            </div>
-
-            <div class="input-group">
-              <label for="CourseTime">上课时间</label>
-              <input type="text" id="CourseTime" v-model="CourseTime">
-            </div>
-
-            <!--提交按钮-->
-            <input type="button" value="提交" @click="queryCourses">
-
-
-          </div>
-
-          <!--选课记录返回，用列表进行呈现-->
-
-          <!--展示查询到的选课信息-->
-          <form v-if="showForm">
-            <table class="course-table">
-              <tr>
-                <th></th>
-                <th>课程号</th>
-                <th>课程名</th>
-                <th>教师号</th>
-                <th>教师姓名</th>
-                <th>课程容量</th>
-                <th>已选人数</th>
-                <th>上课时间</th>
-              </tr>
-              <tr v-for="course in courseInfo" :key="course.course_id">
-                <td><input type="checkbox" v-model="selectedCourses" :value="course.course_id"></td>
-                <td>{{ course.course_id }}</td>
-                <td>{{ course.course_name }}</td>
-                <td>{{ course.teacher_id }}</td>
-                <td>{{ course.teacher_name }}</td>
-                <td>{{ course.capacity }}</td>
-                <td>{{ course.selected_number }}</td>
-                <td>{{ course.time }}</td>
-              </tr>
-            </table>
-            <button @click="selectCourses">确认选课</button>
-          </form>
+          <StudentSelectCourse></StudentSelectCourse>
         </div>
 
         <div v-else-if="selectedFunction === '退课'">
-          <!-- 退课功能内容 -->
-          <!--先把课表查出来，前面再加一个多选框，直接选择然后点击退课就行-->
-          <div>
-            <button @click="queryCourses">查询课表</button>
-            <form>
-              <table class="course-table">
-                <tr>
-                  <th></th>
-                  <th>课程号</th>
-                  <th>课程名</th>
-                  <th>教师号</th>
-                  <th>教师姓名</th>
-                  <th>课程容量</th>
-                  <th>已选人数</th>
-                  <th>上课时间</th>
-                </tr>
-                <tr v-for="course in myCourses" :key="course.course_id">
-                  <td><input type="checkbox" v-model="deletedCourses" :value="course.course_id"></td>
-                  <td>{{ course.course_id }}</td>
-                  <td>{{ course.course_name }}</td>
-                  <td>{{ course.teacher_id }}</td>
-                  <td>{{ course.teacher_name }}</td>
-                  <td>{{ course.capacity }}</td>
-                  <td>{{ course.selected_number }}</td>
-                  <td>{{ course.time }}</td>
-                </tr>
-              </table>
-              <button @click="dropCourses">退选所选课程</button>
-            </form>
-          </div>
-
+          <StudentDeleteCrouse></StudentDeleteCrouse>
         </div>
 
         <div v-else-if="selectedFunction === '成绩查询'">
-          <!-- 成绩查询功能内容 -->
           <StudentQueryScore class="course-table"></StudentQueryScore>
-
         </div>
 
         <div v-else-if="selectedFunction === '课表查询'">
-          <!-- 课表查询功能内容 -->
-          <CourseSchedule :userId="userId" :myCourses="myCourses"></CourseSchedule>
+          <CourseSchedule :myCourses="myCourses"></CourseSchedule>
         </div>
+
       </div>
     </div>
   </div>
@@ -137,19 +42,24 @@
   
 <script>
 import axios from "axios";
+
+import StudentSelectCourse from "./StudentSelectCourse.vue";
+import StudentDeleteCrouse from "./StudentDeleteCrouse.vue";
 import StudentQueryScore from "./StudentQueryScore.vue";
 import CourseSchedule from "../components/CourseSchedule.vue";
 
 export default {
   name: "StudentPages",
   components: {
+    StudentSelectCourse,
+    StudentDeleteCrouse,
     StudentQueryScore,
     CourseSchedule
   },
 
   // 来自父组件的数据
   props: {
-   
+
   },
 
   // data()函数部分
@@ -361,7 +271,7 @@ export default {
 };
 </script>
   
-<style scoped>
+<style>
 .top-bar {
   background: #208fcb;
   color: #fff;
