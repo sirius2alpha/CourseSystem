@@ -2,7 +2,7 @@
   <div>
     <header class="top-bar">
       <div class="top-bar-content">
-        <span>聪明选课系统</span>
+        <span>聪明教务系统</span>
         <span class="user-name">{{ userName }}</span>
       </div>
     </header>
@@ -11,7 +11,8 @@
       <aside class="sidebar">
         <ul>
           <li @click="selectFunction('选课')">选课</li>
-          <li @click="selectFunction('退课')">退课</li>
+          <!--选中退课的时候同时触发方法fetchCourse()-->
+          <li @click="selectFunction('退课'); fetchCourses()">退课</li>
           <li @click="selectFunction('成绩查询')">成绩查询</li>
           <li @click="selectFunction('课表查询')">课表查询</li>
         </ul>
@@ -19,43 +20,40 @@
 
       <div class="main-content-right">
 
-        <!-- 选课功能内容 -->
         <div v-if="selectedFunction === '选课'">
-          <!-- 选课功能内容 -->
-
           <!-- 包括输入课程号、教师号、教师姓名的表单 -->
           <div class="input-row">
+
             <div class="input-group">
               <label for="CourseId">课程号</label>
-              <input type="number" id="CourseId" v-model="CourseId">
+              <input type="number" id="CourseId" v-model="queryInfo.CourseId">
             </div>
 
             <div class="input-group">
               <label for="CourseName">课程名</label>
-              <input type="text" id="CourseName" v-model="CourseName">
+              <input type="text" id="CourseName" v-model="queryInfo.CourseName">
             </div>
 
             <div class="input-group">
               <label for="TeacherId">教师号</label>
-              <input type="number" id="TeacherId" v-model="TeacherId">
+              <input type="number" id="TeacherId" v-model="queryInfo.TeacherId">
             </div>
 
             <div class="input-group">
               <label for="TeacherName">教师姓名</label>
-              <input type="text" id="TeacherName" v-model="TeacherName">
+              <input type="text" id="TeacherName" v-model="queryInfo.TeacherName">
             </div>
 
             <div class="input-group">
               <label for="CourseTime">上课时间</label>
-              <input type="text" id="CourseTime" v-model="CourseTime">
+              <input type="text" id="CourseTime" v-model="queryInfo.CourseTime">
             </div>
 
-            <!--提交按钮-->
-            <input type="button" value="提交" @click="queryCourses">
-
-
           </div>
-
+          <!--提交按钮-->
+          <div style="margin: 10px;">
+            <input type="button" value="提交" @click="queryCourses">
+          </div>
           <!--选课记录返回，用列表进行呈现-->
 
           <!--展示查询到的选课信息-->
@@ -87,10 +85,8 @@
         </div>
 
         <div v-else-if="selectedFunction === '退课'">
-          <!-- 退课功能内容 -->
           <!--先把课表查出来，前面再加一个多选框，直接选择然后点击退课就行-->
           <div>
-            <button @click="queryCourses">查询课表</button>
             <form>
               <table class="course-table">
                 <tr>
@@ -117,19 +113,16 @@
               <button @click="dropCourses">退选所选课程</button>
             </form>
           </div>
-
         </div>
 
         <div v-else-if="selectedFunction === '成绩查询'">
-          <!-- 成绩查询功能内容 -->
-          <StudentQueryScore class="course-table"></StudentQueryScore>
-
+          <StudentQueryScore :myCourses="myCourses"></StudentQueryScore>
         </div>
 
         <div v-else-if="selectedFunction === '课表查询'">
-          <!-- 课表查询功能内容 -->
-          <CourseSchedule :userId="userId" :myCourses="myCourses"></CourseSchedule>
+          <CourseSchedule :myCourses="myCourses"></CourseSchedule>
         </div>
+
       </div>
     </div>
   </div>
@@ -137,6 +130,7 @@
   
 <script>
 import axios from "axios";
+
 import StudentQueryScore from "./StudentQueryScore.vue";
 import CourseSchedule from "../components/CourseSchedule.vue";
 
@@ -149,24 +143,31 @@ export default {
 
   // 来自父组件的数据
   props: {
-   
+    userId: {
+            type: String,
+            required: true,
+        },
+        userName: {
+            type: String,
+            required: true,
+        }
   },
 
   // data()函数部分
   data() {
     return {
-      userName: "用户名称", // 用户名，你可以从登录信息中获取
+      host:"https://127.0.0.1:9000",
       selectedFunction: "选课", // 默认选中的功能
-      showForm: false, // 选课信息的表单点击选课查询之后才会显示
-
-      userId: "userId",
 
       // 选课功能中的输入框
-      CourseId: "CourseId",
-      CourseName: "CourseName",
-      TeacherId: "TeacherId",
-      TeacherName: "TeacherName",
-      CourseTime: "CourseTime",
+      showForm: false,
+      queryInfo: {
+        CourseId: "CourseId",
+        CourseName: "CourseName",
+        TeacherId: "TeacherId",
+        TeacherName: "TeacherName",
+        CourseTime: "CourseTime",
+      },
 
       // 选课功能中的课程信息
       courseInfo: [{
@@ -225,14 +226,14 @@ export default {
     // 查询功能
     async queryCourses() {
       // 把v-model数据保存到变量中
-      const course_id = this.CourseId;
-      const course_name = this.CourseName;
-      const teacher_id = this.TeacherId;
-      const teacher_name = this.TeacherName;
-      const course_time = this.CourseTime;
+      const course_id = this.queryInfo.CourseId;
+      const course_name = this.queryInfo.CourseName;
+      const teacher_id = this.queryInfo.TeacherId;
+      const teacher_name = this.queryInfo.TeacherName;
+      const course_time = this.queryInfo.CourseTime;
 
       // 构造请求体
-      const apiUrl = `/api/courses`;
+      const apiUrl = `${this.host}/api/courses`;
       const requestBody = {
         course_id,
         course_name,
@@ -263,7 +264,7 @@ export default {
     async fetchCourses() {
 
       // 构造请求体
-      const apiUrl = `/api/students/${this.userId}/courses`;
+      const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
 
       try {
         // 发送 GET 请求
@@ -273,8 +274,6 @@ export default {
         // 用JSON.parse()方法将字符串转换为JSON对象
         const courseData = JSON.parse(response.data);
         this.myCourses = courseData;
-        this.showForm = true; // 显示表单组件
-
       }
       catch (error) {
         console.error("选课信息查询失败", error);
@@ -302,14 +301,14 @@ export default {
           });
         });
 
-        const apiUrl = `/api/students/${this.userId}/courses`;
+        const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
         const response = await axios.post(apiUrl, requestBody);
 
         const result = JSON.parse(response.data);
         if (result.success) {
           alert("选课成功");
           this.selectedCourses = []; // 清空已选课程
-          this.queryCourses(); // 重新查询课表
+          this.fetchCourses(); // 重新查询课表
         } else {
           alert("选课失败：" + result.message);
         }
@@ -336,7 +335,7 @@ export default {
           });
         });
 
-        const apiUrl = `/api/students/${this.userId}/courses`;
+        const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
         const response = await axios.delete(apiUrl, requestBody);
 
         const result = JSON.parse(response.data);
@@ -354,14 +353,14 @@ export default {
     },
 
     mounted() {
-      this.queryCourses();
+      this.fetchCourses();
       this.showForm = false; // 隐藏表单组件
     }
   },
 };
 </script>
   
-<style scoped>
+<style>
 .top-bar {
   background: #208fcb;
   color: #fff;

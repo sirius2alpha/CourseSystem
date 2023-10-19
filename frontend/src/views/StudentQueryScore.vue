@@ -21,14 +21,10 @@
 
 <script>
 export default {
-    // 来自父组件的数据
+    name:"studentQueryScore",
     props: {
-        userId: {
-            type: String,
-            required: true
-        },
         myCourses: {
-            type: Object,
+            type: Array,
             required: true
         }
     }

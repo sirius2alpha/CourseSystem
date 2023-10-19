@@ -22,33 +22,6 @@
 
                 <div v-if="selectedFunction === '开课详情'">
                     <!--信息保存在courseInfo中-->
-                    <div>
-            <form>
-              <table class="course-table">
-                <tr>
-                  <th></th>
-                  <th>课程号</th>
-                  <th>课程名</th>
-                  <th>教师号</th>
-                  <th>教师姓名</th>
-                  <th>课程容量</th>
-                  <th>已选人数</th>
-                  <th>上课时间</th>
-                </tr>
-                <tr v-for="course in myCourses" :key="course.course_id">
-                  <td><input type="checkbox" v-model="deletedCourses" :value="course.course_id"></td>
-                  <td>{{ course.course_id }}</td>
-                  <td>{{ course.course_name }}</td>
-                  <td>{{ course.teacher_id }}</td>
-                  <td>{{ course.teacher_name }}</td>
-                  <td>{{ course.capacity }}</td>
-                  <td>{{ course.selected_number }}</td>
-                  <td>{{ course.time }}</td>
-                </tr>
-              </table>
-              <button @click="dropCourses">退选所选课程</button>
-            </form>
-          </div>
                 </div>
 
                 <div v-else-if="selectedFunction === '成绩录入'">

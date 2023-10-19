@@ -70,11 +70,7 @@ export default {
         console.log("登录成功", response.data);
         // 处理登录成功后的逻辑
         // 跳转到选课页面
-        if (response.data.role === 1) {
-          this.$router.push("students");
-        } else if (response.data.role === 2) {
-          this.$router.push("teachers");
-        }
+        // this.$router.push("students");
       } 
       catch (error) {
         console.error("登录失败", error);
