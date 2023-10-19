@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper>
-    <select id="getUserBYMassage" resultType="com.xkxt.xuankexitong.bean.User">
-        SELECT * FROM Users WHERE
-        id=#{100000} AND msg=#{859a862d259997add85c94e5afb56ab5}
-    </select>
-</mapper>

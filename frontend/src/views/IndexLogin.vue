@@ -23,15 +23,14 @@
     <!-- bind the method "login" on the input -->
     <input type="button" value="登录" @click="login">
     <input type="button" value="学生页面" @click="jumpStudents">
-    <router-link to="/students">学生页面</router-link>
+    <input type="button" value="老师页面" @click="jumpTeachers">
+
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import md5 from "md5";
-
-
 
 
 export default {
@@ -44,51 +43,54 @@ export default {
   // data of the component
   data() {
     return {
-      Loginform:{
-        userId: "",
-        password: "",
-      }
+      userId: "",
+      password: "",
+      host:"https://127.0.0.1:9000",
     };
   },
 
   // methods of the component
   methods: {
     async login() {
-      const no = this.userId;
+      const id = this.userId;
       const password = this.password;
 
       // 使用 md5 对密码进行摘要处理
-      const hashedPassword = md5(no + password);
+      const hashedPassword = md5(id + password);
 
-      const apiUrl = `http://127.0.0.1:8090/user/id/msg`;
+      const apiUrl = `${this.host}/api/users/${id}/pwd`;
       const requestBody = {
-        no,
-        password: hashedPassword,
+        id,
+        msg: hashedPassword,
       };
 
+      try {
         // 发送 POST 请求
         const response = await axios.post(apiUrl, requestBody);
-        console.log(response);
-        if(response.code==200){
-          console.log("登录成功");
-          this.$router.push("students");
-        }
+        console.log("登录成功", response.data);
         // 处理登录成功后的逻辑
         // 跳转到选课页面
-        // this.$router.push("students");
-        else{
-          //console.error("登录失败", error);
+        if (response.data.role === 1) {
+          this.$router.push("students");
+        } else if (response.data.role === 2) {
+          this.$router.push("teachers");
+        }
+      } 
+      catch (error) {
+        console.error("登录失败", error);
         // 处理登录失败后的逻辑
         // 提示输入密码错误
         alert("登录失败，请检查账号和密码是否正确");
-        }
-        
 
+      }
     },
     
     jumpStudents() {
       this.$router.push('students');
-      
+    },
+
+    jumpTeachers(){
+      this.$router.push('teachers');
     }
   },
 };
