@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.project.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.project.entity.User">
+        <id column="id" property="id" />
+        <result column="no" property="no" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="role_id" property="roleId" />
+        <result column="isValid" property="isvalid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, no, name, password, role_id, isValid
+    </sql>
+    <!-- 只是分页 -->
+    <select id="pageC" resultType="com.example.project.entity.User">
+        SELECT * from user
+    </select>
+    <!-- 分页+Wrapper -->
+    <select id="pageCC" resultType="com.example.project.entity.User">
+        SELECT * from user ${ew.customSqlSegment}
+    </select>
+</mapper>
