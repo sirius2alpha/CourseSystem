@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2023-10-17
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -55,24 +55,24 @@ public class UserController {
     }
     //query
 
-    @PostMapping("/id/msg")
+    @PostMapping("/{id}/pwd")
     public Result msg(@RequestBody User user){
         List<User> list = userService.lambdaQuery()
-                .eq(User::getNo,user.getNo())
+                .eq(User::getId,user.getId())
                 .eq(User::getPassword,user.getPassword()).list();
         return list.size()>0?Result.suc(list.get(0)):Result.fail();
     }
 
-    @PostMapping("/listP")
+   /* @PostMapping("/listP")
     public List<User> listP(@RequestBody User user){
         LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        if(StringUtils.isNotBlank(user.getName())) {
+        if(StringUtils.isNotBlank(user.getId()) {
             lambdaQueryWrapper.eq(User::getName,user.getName());
         }
         return userService.list(lambdaQueryWrapper);
-    }
+    }*/
     //分页
-    @PostMapping("/listPage")
+    /*@PostMapping("/listPage")
     public List<User> listPage(@RequestBody QueryPageParam query){
 
         //System.out.println("name=="+(String)param.get("name"));
@@ -99,7 +99,7 @@ public class UserController {
         System.out.println("total=="+result.getTotal());
 
         return result.getRecords();
-    }
+    }*/
 
     @PostMapping("/listPageC")
     public List<User> listPageC(@RequestBody QueryPageParam query){
@@ -111,7 +111,7 @@ public class UserController {
         page.setSize(query.getPageSize());
 
         LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(User::getName,name);
+        lambdaQueryWrapper.like(User::getId,name);
 
         IPage result = userService.pageCC(page,lambdaQueryWrapper);
 
@@ -130,7 +130,7 @@ public class UserController {
         page.setSize(query.getPageSize());
 
         LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(User::getName,name);
+        lambdaQueryWrapper.like(User::getId,name);
 
         IPage result = userService.pageCC(page,lambdaQueryWrapper);
 

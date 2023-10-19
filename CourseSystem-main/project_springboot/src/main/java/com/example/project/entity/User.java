@@ -29,16 +29,8 @@ public class User implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     @ApiModelProperty
-    private String no;
-    @ApiModelProperty
-    private String name;
-    @ApiModelProperty
     private String password;
     @ApiModelProperty
     private Integer roleId;
-    @ApiModelProperty
-    @TableField("isValid")
-    private String isvalid;
-
 
 }

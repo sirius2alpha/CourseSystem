@@ -5,23 +5,20 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.project.entity.User">
         <id column="id" property="id" />
-        <result column="no" property="no" />
-        <result column="name" property="name" />
         <result column="password" property="password" />
         <result column="role_id" property="roleId" />
-        <result column="isValid" property="isvalid" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, no, name, password, role_id, isValid
+        id, password, role_id
     </sql>
     <!-- 只是分页 -->
     <select id="pageC" resultType="com.example.project.entity.User">
-        SELECT * from user
+        SELECT * from users
     </select>
     <!-- 分页+Wrapper -->
     <select id="pageCC" resultType="com.example.project.entity.User">
-        SELECT * from user ${ew.customSqlSegment}
+        SELECT * from users ${ew.customSqlSegment}
     </select>
 </mapper>

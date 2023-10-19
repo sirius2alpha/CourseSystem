@@ -46,10 +46,10 @@ public class CodeGenerator {
 
 
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/project?allowPublicKeyRetrieval=true&useSSL=false");
+        dsc.setUrl("jdbc:mysql://localhost:3306/course-system?allowPublicKeyRetrieval=true&useSSL=false");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("kaimen");
+        dsc.setPassword("Xie20021008");
         mpg.setDataSource(dsc);
 
         //包配置

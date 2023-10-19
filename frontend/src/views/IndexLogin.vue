@@ -43,9 +43,9 @@ export default {
   // data of the component
   data() {
     return {
-      userId: "",
-      password: "",
-      host:"https://127.0.0.1:9000",
+      userId: "231295",
+      password: "123456",
+      host:"http://127.0.0.1:9000",
     };
   },
 
@@ -61,15 +61,15 @@ export default {
       const apiUrl = `${this.host}/api/users/${id}/pwd`;
       const requestBody = {
         id,
-        msg: hashedPassword,
+        password: hashedPassword,
       };
 
       try {
         // 发送 POST 请求
         const response = await axios.post(apiUrl, requestBody);
-        console.log("登录成功", response.data);
+        console.log("登录成功", response.data.data.roleId);
         // 处理登录成功后的逻辑
-        if(response.data.role === 1){
+        if(response.data.data.roleId == 1){
           this.$router.push('students');
         }
         else{
