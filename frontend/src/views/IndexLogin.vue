@@ -32,6 +32,8 @@ import axios from "axios";
 import md5 from "md5";
 
 
+
+
 export default {
   // define a component
   name: "IndexLogin",
@@ -42,45 +44,51 @@ export default {
   // data of the component
   data() {
     return {
-      userId: "",
-      password: "",
+      Loginform:{
+        userId: "",
+        password: "",
+      }
     };
   },
 
   // methods of the component
   methods: {
     async login() {
-      const id = this.userId;
+      const no = this.userId;
       const password = this.password;
 
       // 使用 md5 对密码进行摘要处理
-      const hashedPassword = md5(id + password);
+      const hashedPassword = md5(no + password);
 
-      const apiUrl = `https://127.0.0.1:9000/api/users/${id}/pwd`;
+      const apiUrl = `http://127.0.0.1:8090/user/id/msg`;
       const requestBody = {
-        id,
-        msg: hashedPassword,
+        no,
+        password: hashedPassword,
       };
 
-      try {
         // 发送 POST 请求
         const response = await axios.post(apiUrl, requestBody);
-        console.log("登录成功", response.data);
+        console.log(response);
+        if(response.code==200){
+          console.log("登录成功");
+          this.$router.push("students");
+        }
         // 处理登录成功后的逻辑
         // 跳转到选课页面
         // this.$router.push("students");
-      } 
-      catch (error) {
-        console.error("登录失败", error);
+        else{
+          //console.error("登录失败", error);
         // 处理登录失败后的逻辑
         // 提示输入密码错误
         alert("登录失败，请检查账号和密码是否正确");
+        }
+        
 
-      }
     },
     
     jumpStudents() {
       this.$router.push('students');
+      
     }
   },
 };
