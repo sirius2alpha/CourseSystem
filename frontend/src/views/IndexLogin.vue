@@ -69,7 +69,7 @@ export default {
         const response = await axios.post(apiUrl, requestBody);
         console.log("登录成功", response.data.data.roleId);
         // 处理登录成功后的逻辑
-        if(response.data.data.roleId == 1){
+        if(response.data.data.roleId === 1){
           this.$router.push('students');
         }
         else{
@@ -113,7 +113,7 @@ export default {
   width: 410px;
   display: flex;
   flex-direction: column;
-  align-items: left;
+  //align-items: left;
   justify-content: center;
   gap: 10px;
   border-radius: 20px;
