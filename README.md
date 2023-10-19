@@ -1,8 +1,15 @@
 # CourseSystem
 ## 技术栈
 vue + axios + springboot + mysql
+
 ## 前端
-前端相关内容在文件夹frontend下，预览网页在/fronend下执行命令`npm run serve`就可以
+前端相关内容在文件夹frontend下
+
+确保在电脑上已经安装node.js和npm
+
+执行命令`npm install`从pakage.json中安装依赖；
+
+执行命令`npm run serve`启动项目
 
 ## 后端
 
