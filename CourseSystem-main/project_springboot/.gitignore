@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 数据库相关配置 ###
+/resourc3=es/application.yml
