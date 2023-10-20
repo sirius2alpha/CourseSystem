@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : chril
+ Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80033
+ Source Server Version : 80100 (8.1.0)
  Source Host           : localhost:3306
- Source Schema         : course-system
+ Source Schema         : course_system
 
  Target Server Type    : MySQL
- Target Server Version : 80033
+ Target Server Version : 80100 (8.1.0)
  File Encoding         : 65001
 
- Date: 19/10/2023 22:22:15
+ Date: 20/10/2023 23:50:38
 */
 
 SET NAMES utf8mb4;
@@ -22,10 +22,10 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `colleges`;
 CREATE TABLE `colleges`  (
-  `id` int(0) NOT NULL,
+  `id` int NOT NULL,
   `college` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of colleges
@@ -47,13 +47,13 @@ INSERT INTO `colleges` VALUES (10, '社会学院');
 DROP TABLE IF EXISTS `course_plan`;
 CREATE TABLE `course_plan`  (
   `course_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `course_id` int(0) NOT NULL,
-  `college_id` int(0) NOT NULL,
+  `course_id` int NOT NULL,
+  `college_id` int NOT NULL,
   PRIMARY KEY (`course_id`, `college_id`) USING BTREE,
-  INDEX `course_id`(`course_id`) USING BTREE,
-  INDEX `college_id`(`college_id`) USING BTREE,
+  INDEX `course_id`(`course_id` ASC) USING BTREE,
+  INDEX `college_id`(`college_id` ASC) USING BTREE,
   CONSTRAINT `course_plan_ibfk_1` FOREIGN KEY (`college_id`) REFERENCES `colleges` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of course_plan
@@ -84,89 +84,89 @@ INSERT INTO `course_plan` VALUES ('golang', 1019, 9);
 -- ----------------------------
 DROP TABLE IF EXISTS `current_courses`;
 CREATE TABLE `current_courses`  (
-  `no` int(0) NULL DEFAULT NULL,
-  `term` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `teacher_id` int(0) NOT NULL,
-  `course_id` int(0) NOT NULL,
-  PRIMARY KEY (`term`, `teacher_id`, `course_id`) USING BTREE,
-  INDEX `course_id`(`course_id`) USING BTREE,
-  INDEX `current_courses_ibfk_2`(`teacher_id`) USING BTREE,
-  INDEX `term`(`term`) USING BTREE,
-  INDEX `no`(`no`) USING BTREE,
+  `no` int NULL DEFAULT NULL,
+  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `teacher_id` int NOT NULL,
+  `course_id` int NOT NULL,
+  PRIMARY KEY (`time`, `teacher_id`, `course_id`) USING BTREE,
+  INDEX `course_id`(`course_id` ASC) USING BTREE,
+  INDEX `current_courses_ibfk_2`(`teacher_id` ASC) USING BTREE,
+  INDEX `term`(`time` ASC) USING BTREE,
+  INDEX `no`(`no` ASC) USING BTREE,
   CONSTRAINT `current_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course_plan` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `current_courses_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of current_courses
 -- ----------------------------
-INSERT INTO `current_courses` VALUES (1, '21-22冬', 100027, 1008);
-INSERT INTO `current_courses` VALUES (2, '22-23春', 100008, 1012);
-INSERT INTO `current_courses` VALUES (3, '21-22春', 100033, 1004);
-INSERT INTO `current_courses` VALUES (4, '22-23春', 100084, 1009);
-INSERT INTO `current_courses` VALUES (5, '22-23秋', 100014, 1009);
-INSERT INTO `current_courses` VALUES (6, '21-22春', 100084, 1016);
-INSERT INTO `current_courses` VALUES (7, '21-22秋', 100074, 1004);
-INSERT INTO `current_courses` VALUES (8, '21-22冬', 100056, 1005);
-INSERT INTO `current_courses` VALUES (9, '22-23秋', 100041, 1019);
-INSERT INTO `current_courses` VALUES (10, '22-23春', 100087, 1019);
-INSERT INTO `current_courses` VALUES (11, '22-23秋', 100062, 1015);
-INSERT INTO `current_courses` VALUES (12, '22-23春', 100046, 1008);
-INSERT INTO `current_courses` VALUES (13, '21-22秋', 100068, 1017);
-INSERT INTO `current_courses` VALUES (14, '22-23冬', 100076, 1019);
-INSERT INTO `current_courses` VALUES (15, '21-22秋', 100069, 1007);
-INSERT INTO `current_courses` VALUES (16, '21-22秋', 100047, 1009);
-INSERT INTO `current_courses` VALUES (17, '21-22冬', 100034, 1018);
-INSERT INTO `current_courses` VALUES (18, '22-23秋', 100040, 1017);
-INSERT INTO `current_courses` VALUES (19, '22-23冬', 100087, 1015);
-INSERT INTO `current_courses` VALUES (20, '22-23冬', 100023, 1014);
-INSERT INTO `current_courses` VALUES (21, '21-22冬', 100075, 1007);
-INSERT INTO `current_courses` VALUES (22, '21-22冬', 100045, 1000);
-INSERT INTO `current_courses` VALUES (23, '21-22春', 100066, 1013);
-INSERT INTO `current_courses` VALUES (24, '22-23春', 100004, 1014);
-INSERT INTO `current_courses` VALUES (25, '21-22秋', 100041, 1007);
-INSERT INTO `current_courses` VALUES (26, '21-22春', 100007, 1006);
-INSERT INTO `current_courses` VALUES (27, '21-22秋', 100074, 1012);
-INSERT INTO `current_courses` VALUES (28, '21-22秋', 100077, 1009);
-INSERT INTO `current_courses` VALUES (29, '21-22秋', 100079, 1019);
-INSERT INTO `current_courses` VALUES (30, '21-22秋', 100090, 1019);
-INSERT INTO `current_courses` VALUES (31, '22-23春', 100063, 1009);
-INSERT INTO `current_courses` VALUES (32, '21-22秋', 100048, 1004);
-INSERT INTO `current_courses` VALUES (33, '22-23秋', 100027, 1015);
-INSERT INTO `current_courses` VALUES (34, '21-22冬', 100030, 1006);
-INSERT INTO `current_courses` VALUES (35, '21-22春', 100070, 1018);
-INSERT INTO `current_courses` VALUES (36, '21-22秋', 100009, 1018);
-INSERT INTO `current_courses` VALUES (37, '21-22冬', 100031, 1004);
-INSERT INTO `current_courses` VALUES (38, '21-22秋', 100053, 1002);
-INSERT INTO `current_courses` VALUES (39, '21-22冬', 100034, 1007);
-INSERT INTO `current_courses` VALUES (40, '21-22春', 100021, 1005);
-INSERT INTO `current_courses` VALUES (41, '21-22冬', 100097, 1016);
-INSERT INTO `current_courses` VALUES (42, '22-23冬', 100080, 1008);
-INSERT INTO `current_courses` VALUES (43, '21-22春', 100077, 1001);
-INSERT INTO `current_courses` VALUES (44, '22-23春', 100082, 1000);
-INSERT INTO `current_courses` VALUES (45, '22-23秋', 100099, 1008);
-INSERT INTO `current_courses` VALUES (46, '21-22秋', 100058, 1006);
-INSERT INTO `current_courses` VALUES (47, '22-23春', 100024, 1009);
-INSERT INTO `current_courses` VALUES (48, '22-23秋', 100052, 1008);
-INSERT INTO `current_courses` VALUES (49, '21-22冬', 100021, 1019);
-INSERT INTO `current_courses` VALUES (50, '22-23春', 100071, 1002);
+INSERT INTO `current_courses` VALUES (1, '二3-4', 100027, 1008);
+INSERT INTO `current_courses` VALUES (2, '四5-6', 100008, 1012);
+INSERT INTO `current_courses` VALUES (3, '一11-12', 100033, 1004);
+INSERT INTO `current_courses` VALUES (4, '三1-2', 100084, 1009);
+INSERT INTO `current_courses` VALUES (5, '四5-6', 100014, 1009);
+INSERT INTO `current_courses` VALUES (6, '二1-2', 100084, 1016);
+INSERT INTO `current_courses` VALUES (7, '三5-6', 100074, 1004);
+INSERT INTO `current_courses` VALUES (8, '三1-2', 100056, 1005);
+INSERT INTO `current_courses` VALUES (9, '四11-12', 100041, 1019);
+INSERT INTO `current_courses` VALUES (10, '五7-8', 100087, 1019);
+INSERT INTO `current_courses` VALUES (11, '二1-2', 100062, 1015);
+INSERT INTO `current_courses` VALUES (12, '三1-2', 100046, 1008);
+INSERT INTO `current_courses` VALUES (13, '三1-2', 100068, 1017);
+INSERT INTO `current_courses` VALUES (14, '五5-6', 100076, 1019);
+INSERT INTO `current_courses` VALUES (15, '二1-2', 100069, 1007);
+INSERT INTO `current_courses` VALUES (16, '四3-4', 100047, 1009);
+INSERT INTO `current_courses` VALUES (17, '五7-8', 100034, 1018);
+INSERT INTO `current_courses` VALUES (18, '一11-12', 100040, 1017);
+INSERT INTO `current_courses` VALUES (19, '五5-6', 100087, 1015);
+INSERT INTO `current_courses` VALUES (20, '三5-6', 100023, 1014);
+INSERT INTO `current_courses` VALUES (21, '二11-12', 100075, 1007);
+INSERT INTO `current_courses` VALUES (22, '四3-4', 100045, 1000);
+INSERT INTO `current_courses` VALUES (23, '一1-2', 100066, 1013);
+INSERT INTO `current_courses` VALUES (24, '五5-6', 100004, 1014);
+INSERT INTO `current_courses` VALUES (25, '三5-6', 100041, 1007);
+INSERT INTO `current_courses` VALUES (26, '一9-10', 100007, 1006);
+INSERT INTO `current_courses` VALUES (27, '二1-2', 100074, 1012);
+INSERT INTO `current_courses` VALUES (28, '一1-2', 100077, 1009);
+INSERT INTO `current_courses` VALUES (29, '五7-8', 100079, 1019);
+INSERT INTO `current_courses` VALUES (30, '三1-2', 100090, 1019);
+INSERT INTO `current_courses` VALUES (31, '一1-2', 100063, 1009);
+INSERT INTO `current_courses` VALUES (32, '一11-12', 100048, 1004);
+INSERT INTO `current_courses` VALUES (33, '四7-8', 100027, 1015);
+INSERT INTO `current_courses` VALUES (34, '四5-6', 100030, 1006);
+INSERT INTO `current_courses` VALUES (35, '一9-10', 100070, 1018);
+INSERT INTO `current_courses` VALUES (36, '四5-6', 100009, 1018);
+INSERT INTO `current_courses` VALUES (37, '三3-4', 100031, 1004);
+INSERT INTO `current_courses` VALUES (38, '四3-4', 100053, 1002);
+INSERT INTO `current_courses` VALUES (39, '二3-4', 100034, 1007);
+INSERT INTO `current_courses` VALUES (40, '四5-6', 100021, 1005);
+INSERT INTO `current_courses` VALUES (41, '三3-4', 100097, 1016);
+INSERT INTO `current_courses` VALUES (42, '二11-12', 100080, 1008);
+INSERT INTO `current_courses` VALUES (43, '四7-8', 100077, 1001);
+INSERT INTO `current_courses` VALUES (44, '二1-2', 100082, 1000);
+INSERT INTO `current_courses` VALUES (45, '四3-4', 100099, 1008);
+INSERT INTO `current_courses` VALUES (46, '一9-10', 100058, 1006);
+INSERT INTO `current_courses` VALUES (47, '三1-2', 100024, 1009);
+INSERT INTO `current_courses` VALUES (48, '三5-6', 100052, 1008);
+INSERT INTO `current_courses` VALUES (49, '二1-2', 100021, 1019);
+INSERT INTO `current_courses` VALUES (50, '一11-12', 100071, 1002);
 
 -- ----------------------------
 -- Table structure for selected_courses
 -- ----------------------------
 DROP TABLE IF EXISTS `selected_courses`;
 CREATE TABLE `selected_courses`  (
-  `student_id` int(0) NOT NULL,
-  `current_course_id` int(0) NOT NULL,
+  `student_id` int NOT NULL,
+  `current_course_id` int NOT NULL,
   `pscj` double NULL DEFAULT NULL,
   `kscj` double NULL DEFAULT NULL,
   `score` double NULL DEFAULT NULL,
   PRIMARY KEY (`student_id`, `current_course_id`) USING BTREE,
-  INDEX `student_id`(`student_id`) USING BTREE,
-  INDEX `current_course_id`(`current_course_id`) USING BTREE,
+  INDEX `student_id`(`student_id` ASC) USING BTREE,
+  INDEX `current_course_id`(`current_course_id` ASC) USING BTREE,
   CONSTRAINT `selected_courses_ibfk_4` FOREIGN KEY (`current_course_id`) REFERENCES `current_courses` (`no`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `selected_courses_ibfk_5` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of selected_courses
@@ -1177,13 +1177,13 @@ INSERT INTO `selected_courses` VALUES (231999, 38, 67.2, 79.6, 74.6);
 -- ----------------------------
 DROP TABLE IF EXISTS `students`;
 CREATE TABLE `students`  (
-  `id` int(0) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `yxh` int(0) NOT NULL,
+  `yxh` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `yxh`(`yxh`) USING BTREE,
+  INDEX `yxh`(`yxh` ASC) USING BTREE,
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`yxh`) REFERENCES `colleges` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of students
@@ -2194,13 +2194,13 @@ INSERT INTO `students` VALUES (231999, '陆云熙', 10);
 -- ----------------------------
 DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE `teachers`  (
-  `id` int(0) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `yxh` int(0) NOT NULL,
+  `yxh` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `yxh`(`yxh`) USING BTREE,
+  INDEX `yxh`(`yxh` ASC) USING BTREE,
   CONSTRAINT `teachers_ibfk_1` FOREIGN KEY (`yxh`) REFERENCES `colleges` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of teachers
@@ -2311,11 +2311,11 @@ INSERT INTO `teachers` VALUES (100099, '田秀英', 1);
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` int(0) NOT NULL,
+  `id` int NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `role_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
