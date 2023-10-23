@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.project.mapper.CurrentCoursesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.project.entity.CurrentCourses">
+        <id column="time" property="time" />
+        <result column="no" property="no" />
+        <result column="teacher_id" property="teacherId" />
+        <result column="course_id" property="courseId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        no, time, teacher_id, course_id
+    </sql>
+
+</mapper>

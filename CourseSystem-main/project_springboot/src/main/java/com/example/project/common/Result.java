@@ -11,7 +11,7 @@ public class Result {
     private Object data;//数据
 
     public static Result fail(){
-        return result(400,"失败",0L,null);
+        return result(401,"失败",0L,null);
     }
 
     public static Result suc(){

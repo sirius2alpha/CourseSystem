@@ -35,7 +35,7 @@ public class CodeGenerator {
         GlobalConfig globalConfig = new GlobalConfig();
 //        String projectPath = System.getProperty("user.dir") + "/project";
         String projectPath = System.getProperty("user.dir") + "";
-        globalConfig.setOutputDir(projectPath + "/src/main/java");
+        globalConfig.setOutputDir("E:/IdeaProjects/workspace/CourseSystem-main/project_springboot/src/main/java");
         globalConfig.setAuthor("ge");
         globalConfig.setOpen(false);
         globalConfig.setSwagger2(true);
