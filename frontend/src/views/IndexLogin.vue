@@ -67,9 +67,13 @@ export default {
       try {
         // 发送 POST 请求
         const response = await axios.post(apiUrl, requestBody);
-        console.log("登录成功", response.data);
+        if(response.data.code !== 200){
+          alert("登录失败，请检查账号和密码是否正确");
+          return;
+        }
+        console.log("登录成功", response.data.data.roleId);
         // 处理登录成功后的逻辑
-        if(response.data.data.roleId == 1){
+        if(response.data.data.roleId === 1){
           this.$router.push('students');
         }
         else{

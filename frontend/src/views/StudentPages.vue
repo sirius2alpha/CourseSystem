@@ -151,6 +151,13 @@ export default {
       type: String,
       required: true,
     }
+      type: String,
+      required: true,
+    },
+    userName: {
+      type: String,
+      required: true,
+    }
   },
 
   // data()函数部分
@@ -240,12 +247,18 @@ export default {
         teacher_id: teacher_id,
         teacher_name: teacher_name,
         course_time: course_time
+      const queryParams = {
+        course_id: course_id,
+        course_name: course_name,
+        teacher_id: teacher_id,
+        teacher_name: teacher_name,
+        course_time: course_time
       };
 
       try {
         // 发送 GET 请求
         const response = await axios.get(apiUrl, { params: queryParams });
-        console.log("选课信息查询成功", response.data.data);
+        console.log("选课信息查询成功", response.data);
         // 将查询选课的结果显示到页面上
 
         // 用JSON.parse()方法将字符串转换为JSON对象
