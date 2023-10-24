@@ -144,19 +144,19 @@ export default {
   // 来自父组件的数据
   props: {
     userId: {
-            type: String,
-            required: true,
-        },
-        userName: {
-            type: String,
-            required: true,
-        }
+      type: String,
+      required: true,
+    },
+    userName: {
+      type: String,
+      required: true,
+    }
   },
 
   // data()函数部分
   data() {
     return {
-      host:"https://127.0.0.1:9000",
+      host: "https://127.0.0.1:9000",
       selectedFunction: "选课", // 默认选中的功能
 
       // 选课功能中的输入框
@@ -234,17 +234,17 @@ export default {
 
       // 构造请求体
       const apiUrl = `${this.host}/api/courses`;
-      const requestBody = {
-        course_id,
-        course_name,
-        teacher_id,
-        teacher_name,
-        course_time
+      const queryParams = {
+        course_id: course_id,
+        course_name: course_name,
+        teacher_id: teacher_id,
+        teacher_name: teacher_name,
+        course_time: course_time
       };
 
       try {
         // 发送 GET 请求
-        const response = await axios.get(apiUrl, requestBody);
+        const response = await axios.get(apiUrl, { params: queryParams });
         console.log("选课信息查询成功", response.data);
         // 将查询选课的结果显示到页面上
 

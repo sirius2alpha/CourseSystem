@@ -47,7 +47,14 @@
                 <div v-else-if="selectedFunction === '成绩录入'">
                     <!--根据开课详情中的班级信息，可以进行筛选，录入成绩-->
                     <!--根据courseInfo的课程名字做一个选择框-->
-                    
+                    <div>
+                        <label for="course-select">选择课程：</label>
+                        <select id="course-select" v-model="selectedCourse">
+                            <option v-for="course in courseInfo" :key="course.course_id" :value="course.course_name">{{ course.course_name }}</option>
+                        </select>
+                        <p>你选择的课程是：{{ selectedCourse }}</p>
+                    </div>
+
                 </div>
 
                 <div v-else-if="selectedFunction === '成绩分析'">

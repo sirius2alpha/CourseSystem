@@ -117,7 +117,7 @@ export default {
   width: 410px;
   display: flex;
   flex-direction: column;
-  //align-items: left;
+  align-items: left;
   justify-content: center;
   gap: 10px;
   border-radius: 20px;
