@@ -3,16 +3,11 @@ package com.example.project.controller;
 
 import com.example.project.common.Result;
 import com.example.project.entity.*;
-import com.example.project.service.CoursePlanService;
-import com.example.project.service.CurrentCoursesService;
-import com.example.project.service.SelectcourseService;
-import com.example.project.service.TeachersService;
+import com.example.project.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static java.sql.Types.NULL;
 
@@ -35,7 +30,7 @@ public class SelectcourseController {
     private CoursePlanService coursePlanService;
 
     @Autowired
-    private SelectcourseService selectcourseService;
+    private SelectedCoursesService selectedCoursesService;
 
     @Autowired
     private TeachersService teachersService;
@@ -45,7 +40,7 @@ public class SelectcourseController {
         return currentCoursesService.list();
     }
 
-    @PostMapping("/courses")
+    @GetMapping ("/courses")
     public Result msg(@RequestBody Selectcourse selectcourse){
         Integer courseid=selectcourse.getCourse_id();
         String coursename=selectcourse.getCourse_name();
@@ -118,8 +113,31 @@ public class SelectcourseController {
             }
         }
 
+        List<LinkedHashMap> response=new ArrayList<>();
+        Integer no;
 
+        for(int i=0;i<list.size();i++)
+        {
+            LinkedHashMap res=new LinkedHashMap();
+            courseid=list.get(i).getCourseId();
+            res.put("course_id",courseid);
+            List<CoursePlan> coursesname=coursePlanService.lambdaQuery()
+                    .eq(CoursePlan::getCourseId,courseid).list();
+            res.put("course_name",coursesname.get(0).getCourseName());
+            teacherid=list.get(i).getTeacherId();
+            res.put("teacher_id",teacherid);
+            List<Teachers> teachersname=teachersService.lambdaQuery()
+                    .eq(Teachers::getId,teacherid).list();
+            res.put("teacher_name",teachersname.get(0).getName());
+            res.put("capacity",0);
+            no=list.get(i).getNo();
+            List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
+                    .eq(SelectedCourses::getCurrentCourse_id,no).list();
+            res.put("selected_number",selectno.size());
+            res.put("course_time",list.get(i).getTime());
+            response.add(i,res);
+        }
 
-        return list.size()>0?Result.suc(list):Result.fail();
+        return list.size()>0?Result.suc(response):Result.fail();
     }
 }
