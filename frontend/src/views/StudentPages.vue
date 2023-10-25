@@ -150,14 +150,7 @@ export default {
     userName: {
       type: String,
       required: true,
-    }
-      type: String,
-      required: true,
     },
-    userName: {
-      type: String,
-      required: true,
-    }
   },
 
   // data()函数部分
@@ -224,7 +217,6 @@ export default {
   },
 
   methods: {
-
     // 选择功能
     selectFunction(functionName) {
       this.selectedFunction = functionName;
@@ -241,12 +233,6 @@ export default {
 
       // 构造请求体
       const apiUrl = `${this.host}/api/courses`;
-      const queryParams = {
-        course_id: course_id,
-        course_name: course_name,
-        teacher_id: teacher_id,
-        teacher_name: teacher_name,
-        course_time: course_time
       const queryParams = {
         course_id: course_id,
         course_name: course_name,
