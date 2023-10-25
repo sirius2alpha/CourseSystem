@@ -1,130 +1,132 @@
 <template>
-  <div>
-    <header class="top-bar">
-      <div class="top-bar-content">
-        <span>聪明教务系统</span>
-        <span class="user-name">{{ userName }}</span>
-      </div>
-    </header>
+  <div class="common-layout">
+    <el-container>
 
-    <div class="main-content">
-      <aside class="sidebar">
-        <ul>
-          <li @click="selectFunction('选课')">选课</li>
-          <!--选中退课的时候同时触发方法fetchCourse()-->
-          <li @click="selectFunction('退课'); fetchCourses()">退课</li>
-          <li @click="selectFunction('成绩查询')">成绩查询</li>
-          <li @click="selectFunction('课表查询')">课表查询</li>
-        </ul>
-      </aside>
+      <el-header class="top-bar">
+        <el-row>
 
-      <div class="main-content-right">
+          <el-col :span="8">
+            <div class="flex items-center justify-center h-full">
+              <span class="text-xl font-bold">聪明教务系统</span>
+            </div>
+          </el-col>
 
-        <div v-if="selectedFunction === '选课'">
-          <!-- 包括输入课程号、教师号、教师姓名的表单 -->
-          <div class="input-row">
+          <el-col :span="8" :offset="8">
+            <div class="flex items-center justify-end h-full">
+              <div class="flex items-center">
+                <el-avatar :size="32" class="mr-3"
+                  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                <span class="text-lg font-semibold mr-3"> 袁浩 </span>
+                <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
+                  21122453
+                </span>
+                <el-tag type="success">学生</el-tag>
+              </div>
+            </div>
+          </el-col>
 
-            <div class="input-group">
-              <label for="CourseId">课程号</label>
-              <input type="number" id="CourseId" v-model="queryInfo.CourseId">
+        </el-row>
+      </el-header>
+
+      <el-container>
+
+        <el-aside width="200px">
+          <el-menu default-active="1" class="el-menu-vertical-demo">
+            <el-menu-item index="1" @click="selectFunction('选课')">选课</el-menu-item>
+            <el-menu-item index="2" @click="selectFunction('退课'); fetchCourses()">退课</el-menu-item>
+            <el-menu-item index="3" @click="selectFunction('成绩查询')">成绩查询</el-menu-item>
+            <el-menu-item index="4" @click="selectFunction('课表查询')">课表查询</el-menu-item>
+          </el-menu>
+        </el-aside>
+
+        <el-main>
+          <div class="main-content-right">
+
+            <div v-if="selectedFunction === '选课'">
+              <el-form :model="queryInfo" label-width="100px">
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item label="课程号" prop="CourseId">
+                      <el-input v-model="queryInfo.CourseId" placeholder="请输入课程号"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="课程名" prop="CourseName">
+                      <el-input v-model="queryInfo.CourseName" placeholder="请输入课程名"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="教师号" prop="TeacherId">
+                      <el-input v-model="queryInfo.TeacherId" placeholder="请输入教师号"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="教师姓名" prop="TeacherName">
+                      <el-input v-model="queryInfo.TeacherName" placeholder="请输入教师姓名"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="上课时间" prop="CourseTime">
+                      <el-input v-model="queryInfo.CourseTime" placeholder="请输入上课时间"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+
+              <div style="margin: 10px;">
+                <el-button type="primary" @click="queryCourses">提交</el-button>
+              </div>
+
+              <div v-if="showForm">
+                <el-table :data="courseInfo" style="width: 100%">
+                  <el-table-column type="selection"></el-table-column>
+                  <el-table-column prop="course_id" label="课程号"></el-table-column>
+                  <el-table-column prop="course_name" label="课程名"></el-table-column>
+                  <el-table-column prop="teacher_id" label="教师号"></el-table-column>
+                  <el-table-column prop="teacher_name" label="教师姓名"></el-table-column>
+                  <el-table-column prop="capacity" label="课程容量"></el-table-column>
+                  <el-table-column prop="selected_number" label="已选人数"></el-table-column>
+                  <el-table-column prop="time" label="上课时间"></el-table-column>
+                </el-table>
+                <div style="margin: 10px;">
+                  <el-button type="primary" @click="selectCourses">确认选课</el-button>
+                </div>
+              </div>
             </div>
 
-            <div class="input-group">
-              <label for="CourseName">课程名</label>
-              <input type="text" id="CourseName" v-model="queryInfo.CourseName">
+            <div v-else-if="selectedFunction === '退课'">
+              <div>
+                <el-table :data="myCourses" style="width: 100%">
+                  <el-table-column type="selection"></el-table-column>
+                  <el-table-column prop="course_id" label="课程号"></el-table-column>
+                  <el-table-column prop="course_name" label="课程名"></el-table-column>
+                  <el-table-column prop="teacher_id" label="教师号"></el-table-column>
+                  <el-table-column prop="teacher_name" label="教师姓名"></el-table-column>
+                  <el-table-column prop="capacity" label="课程容量"></el-table-column>
+                  <el-table-column prop="selected_number" label="已选人数"></el-table-column>
+                  <el-table-column prop="time" label="上课时间"></el-table-column>
+                </el-table>
+                <div style="margin: 10px;">
+                  <el-button type="primary" @click="dropCourses">退选所选课程</el-button>
+                </div>
+              </div>
             </div>
 
-            <div class="input-group">
-              <label for="TeacherId">教师号</label>
-              <input type="number" id="TeacherId" v-model="queryInfo.TeacherId">
+            <div v-else-if="selectedFunction === '成绩查询'">
+              <StudentQueryScore :myCourses="myCourses"></StudentQueryScore>
             </div>
 
-            <div class="input-group">
-              <label for="TeacherName">教师姓名</label>
-              <input type="text" id="TeacherName" v-model="queryInfo.TeacherName">
-            </div>
-
-            <div class="input-group">
-              <label for="CourseTime">上课时间</label>
-              <input type="text" id="CourseTime" v-model="queryInfo.CourseTime">
+            <div v-else-if="selectedFunction === '课表查询'">
+              <CourseSchedule :myCourses="myCourses"></CourseSchedule>
             </div>
 
           </div>
-          <!--提交按钮-->
-          <div style="margin: 10px;">
-            <input type="button" value="提交" @click="queryCourses">
-          </div>
-          <!--选课记录返回，用列表进行呈现-->
+        </el-main>
 
-          <!--展示查询到的选课信息-->
-          <form v-if="showForm">
-            <table class="course-table">
-              <tr>
-                <th></th>
-                <th>课程号</th>
-                <th>课程名</th>
-                <th>教师号</th>
-                <th>教师姓名</th>
-                <th>课程容量</th>
-                <th>已选人数</th>
-                <th>上课时间</th>
-              </tr>
-              <tr v-for="course in courseInfo" :key="course.course_id">
-                <td><input type="checkbox" v-model="selectedCourses" :value="course.course_id"></td>
-                <td>{{ course.course_id }}</td>
-                <td>{{ course.course_name }}</td>
-                <td>{{ course.teacher_id }}</td>
-                <td>{{ course.teacher_name }}</td>
-                <td>{{ course.capacity }}</td>
-                <td>{{ course.selected_number }}</td>
-                <td>{{ course.time }}</td>
-              </tr>
-            </table>
-            <button @click="selectCourses">确认选课</button>
-          </form>
-        </div>
-
-        <div v-else-if="selectedFunction === '退课'">
-          <!--先把课表查出来，前面再加一个多选框，直接选择然后点击退课就行-->
-          <div>
-            <form>
-              <table class="course-table">
-                <tr>
-                  <th></th>
-                  <th>课程号</th>
-                  <th>课程名</th>
-                  <th>教师号</th>
-                  <th>教师姓名</th>
-                  <th>课程容量</th>
-                  <th>已选人数</th>
-                  <th>上课时间</th>
-                </tr>
-                <tr v-for="course in myCourses" :key="course.course_id">
-                  <td><input type="checkbox" v-model="deletedCourses" :value="course.course_id"></td>
-                  <td>{{ course.course_id }}</td>
-                  <td>{{ course.course_name }}</td>
-                  <td>{{ course.teacher_id }}</td>
-                  <td>{{ course.teacher_name }}</td>
-                  <td>{{ course.capacity }}</td>
-                  <td>{{ course.selected_number }}</td>
-                  <td>{{ course.time }}</td>
-                </tr>
-              </table>
-              <button @click="dropCourses">退选所选课程</button>
-            </form>
-          </div>
-        </div>
-
-        <div v-else-if="selectedFunction === '成绩查询'">
-          <StudentQueryScore :myCourses="myCourses"></StudentQueryScore>
-        </div>
-
-        <div v-else-if="selectedFunction === '课表查询'">
-          <CourseSchedule :myCourses="myCourses"></CourseSchedule>
-        </div>
-
-      </div>
-    </div>
+      </el-container>
+    </el-container>
   </div>
 </template>
   
@@ -133,6 +135,8 @@ import axios from "axios";
 
 import StudentQueryScore from "./StudentQueryScore.vue";
 import CourseSchedule from "../components/CourseSchedule.vue";
+
+import { ElMessage } from 'element-plus'
 
 export default {
   name: "StudentPages",
@@ -255,7 +259,7 @@ export default {
       }
       catch (error) {
         console.error("选课信息查询失败", error);
-        alert("选课信息查询失败");
+        ElMessage.error('选课信息查询失败')
       }
     },
 
@@ -276,7 +280,7 @@ export default {
       }
       catch (error) {
         console.error("选课信息查询失败", error);
-        alert("选课信息查询失败");
+        ElMessage.error("选课信息查询失败");
       }
     },
 
@@ -305,15 +309,15 @@ export default {
 
         const result = JSON.parse(response.data);
         if (result.success) {
-          alert("选课成功");
+          ElMessage.success("选课成功");
           this.selectedCourses = []; // 清空已选课程
           this.fetchCourses(); // 重新查询课表
         } else {
-          alert("选课失败：" + result.message);
+          ElMessage.error("选课失败：" + result.message);
         }
       } catch (error) {
         console.error("选课操作失败", error);
-        alert("选课操作失败");
+        ElMessage.error("选课操作失败");
       }
     },
 
@@ -339,15 +343,17 @@ export default {
 
         const result = JSON.parse(response.data);
         if (result.success) {
-          alert("退课成功");
+
+          ElMessage.success("退课成功");
+
           this.deletedCourses = []; // 清空已选课程
           this.queryCourses(); // 重新查询课表
         } else {
-          alert("退课失败：" + result.message);
+          ElMessage.error("退课失败：" + result.message);
         }
       } catch (error) {
         console.error("退课操作失败", error);
-        alert("退课操作失败");
+        ElMessage.error("退课操作失败");
       }
     },
 

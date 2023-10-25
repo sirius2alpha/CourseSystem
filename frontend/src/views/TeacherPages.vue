@@ -1,105 +1,138 @@
 <template>
-    <div>
-        <header class="top-bar">
-            <div class="top-bar-content">
-                <span>聪明教务系统</span>
-                <span class="user-name">{{ userName }}</span>
-            </div>
-        </header>
+    <div class="common-layout">
+        <el-container>
+            <el-header class="top-bar">
+                <el-row>
 
-        <div class="main-content">
-            <aside class="sidebar">
-                <ul>
-                    <!--选中开课详情的时候同时触发方法fetchCourse()-->
-                    <li @click="selectFunction('开课详情'); fetchCourses()">开课详情</li>
-                    <li @click="selectFunction('成绩录入')">成绩录入</li>
-                    <li @click="selectFunction('成绩分析')">成绩分析</li>
-                    <li @click="selectFunction('开设课程')">开设课程</li>
-                </ul>
-            </aside>
+                    <el-col :span="8">
+                        <div class="flex items-center justify-center h-full">
+                            <span class="text-xl font-bold">聪明教务系统</span>
+                        </div>
+                    </el-col>
 
-            <div class="main-content-right">
+                    <el-col :span="8" :offset="8">
+                        <div class="flex items-center justify-end h-full">
+                            <div class="flex items-center">
+                                <el-avatar :size="32" class="mr-3"
+                                    src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                                <span class="text-lg font-semibold mr-3"> 袁浩 </span>
+                                <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
+                                    21122453
+                                </span>
+                                <el-tag type="success">教师</el-tag>
+                            </div>
+                        </div>
+                    </el-col>
 
-                <div v-if="selectedFunction === '开课详情'">
-                    <!--信息保存在courseInfo中-->
-                    <table class="course-table">
-                        <tr>
-                            <th>课程号</th>
-                            <th>课程名</th>
-                            <th>教师号</th>
-                            <th>教师姓名</th>
-                            <th>课程容量</th>
-                            <th>已选人数</th>
-                            <th>上课时间</th>
-                        </tr>
-                        <tr v-for="course in courseInfo" :key="course.course_id">
-                            <td>{{ course.course_id }}</td>
-                            <td>{{ course.course_name }}</td>
-                            <td>{{ course.teacher_id }}</td>
-                            <td>{{ course.teacher_name }}</td>
-                            <td>{{ course.capacity }}</td>
-                            <td>{{ course.selected_number }}</td>
-                            <td>{{ course.time }}</td>
-                        </tr>
-                    </table>
-                </div>
+                </el-row>
+            </el-header>
 
-                <div v-else-if="selectedFunction === '成绩录入'">
-                    <!--根据开课详情中的班级信息，可以进行筛选，录入成绩-->
-                    <!--根据courseInfo的课程名字做一个选择框-->
-                    <div style="margin: 20px;">
-                        <label for="course-select">选择课程班级：</label>
-                        <el-select v-model="selectedCourse" class="m-2" placeholder="">
-                            <el-option v-for="course in courseInfo" :key="course.course_id" :label="course - select"
-                                :value="course.course_name" />
-                        </el-select>
+            <div class="main-content">
+                <!--aside class="sidebar">
+                    <ul>
+                       
+                        <li @click="selectFunction('开课详情'); fetchCourses()">开课详情</li>
+                        <li @click="selectFunction('成绩录入')">成绩录入</li>
+                        <li @click="selectFunction('成绩分析')">成绩分析</li>
+                        <li @click="selectFunction('开设课程')">开设课程</li>
+                    </ul>
+                </aside-->
 
-                        <!--对选中的selectedCourse进行查询，返回数据给tableData-->
-                        <el-table :data="tableData" stripe style="width: 100%">
-                            <el-table-column prop="student_id" label="学号" width="180" />
-                            <el-table-column prop="student_name" label="姓名" width="180" />
-                            <el-table-column label="成绩">
-                                <template v-slot="scope">
-                                    <template v-if="scope.row">
-                                        <el-row>
-                                            <el-col :span="4">
-                                                <label for="daily-score-input">平时成绩</label>
-                                                <el-input v-model="scope.row.daily_score" class="w-80" placeholder="平时成绩"
-                                                    id="daily-score-input" />
-                                            </el-col>
+                <el-aside width="200px">
+                    <el-menu default-active="1" class="el-menu-vertical-demo">
+                        <el-menu-item index="1" @click="selectFunction('开课详情'); fetchCourses()">开课详情</el-menu-item>
+                        <el-menu-item index="2" @click="selectFunction('成绩录入')">成绩录入</el-menu-item>
+                        <el-menu-item index="3" @click="selectFunction('成绩分析')">成绩分析</el-menu-item>
+                        <el-menu-item index="4" @click="selectFunction('开设课程')">开设课程</el-menu-item>
+                    </el-menu>
+                </el-aside>
 
-                                            <el-col :span="4">
-                                                <label for="exam-score-input">考试成绩</label>
-                                                <el-input v-model="scope.row.examination_score" class="w-80"
-                                                    placeholder="考试成绩" id="exam-score-input" />
-                                            </el-col>
+                <div class="main-content-right">
 
-                                        </el-row>
-                                    </template>
+                    <div v-if="selectedFunction === '开课详情'">
+                        <!--信息保存在courseInfo中-->
+                        <table class="course-table">
+                            <tr>
+                                <th>课程号</th>
+                                <th>课程名</th>
+                                <th>教师号</th>
+                                <th>教师姓名</th>
+                                <th>课程容量</th>
+                                <th>已选人数</th>
+                                <th>上课时间</th>
+                            </tr>
+                            <tr v-for="course in courseInfo" :key="course.course_id">
+                                <td>{{ course.course_id }}</td>
+                                <td>{{ course.course_name }}</td>
+                                <td>{{ course.teacher_id }}</td>
+                                <td>{{ course.teacher_name }}</td>
+                                <td>{{ course.capacity }}</td>
+                                <td>{{ course.selected_number }}</td>
+                                <td>{{ course.time }}</td>
+                            </tr>
+                        </table>
+                    </div>
 
-                                </template>
-                            </el-table-column>
-                        </el-table>
+                    <div v-else-if="selectedFunction === '成绩录入'">
+                        <!--根据开课详情中的班级信息，可以进行筛选，录入成绩-->
+                        <!--根据courseInfo的课程名字做一个选择框-->
                         <div style="margin: 20px;">
-                        <el-button type="primary" @click="submitScore">保存</el-button>
+                            <label for="course-select">选择课程班级：</label>
+                            <el-select v-model="selectedCourse" class="m-2" placeholder="">
+                                <el-option v-for="course in courseInfo" :key="course.course_id" :label="course - select"
+                                    :value="course.course_name" />
+                            </el-select>
+
+                            <!--对选中的selectedCourse进行查询，返回数据给tableData-->
+                            <el-table :data="tableData" stripe style="width: 100%">
+                                <el-table-column prop="student_id" label="学号" width="180" />
+                                <el-table-column prop="student_name" label="姓名" width="180" />
+                                <el-table-column label="成绩">
+                                    <template v-slot="scope">
+                                        <template v-if="scope.row">
+                                            <el-row>
+                                                <el-col :span="4">
+                                                    <label for="daily-score-input">平时成绩</label>
+                                                    <el-input v-model="scope.row.daily_score" class="w-80"
+                                                        placeholder="平时成绩" id="daily-score-input" />
+                                                </el-col>
+
+                                                <el-col :span="4">
+                                                    <label for="exam-score-input">考试成绩</label>
+                                                    <el-input v-model="scope.row.examination_score" class="w-80"
+                                                        placeholder="考试成绩" id="exam-score-input" />
+                                                </el-col>
+
+                                            </el-row>
+                                        </template>
+
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            <div style="margin: 20px;">
+                                <el-button type="primary" @click="submitScore">保存</el-button>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <div v-else-if="selectedFunction === '成绩分析'">
+                    </div>
+
+                    <div v-else-if="selectedFunction === '开设课程'">
                     </div>
 
                 </div>
-
-                <div v-else-if="selectedFunction === '成绩分析'">
-                </div>
-
-                <div v-else-if="selectedFunction === '开设课程'">
-                </div>
-
             </div>
-        </div>
+        </el-container>
     </div>
 </template>
     
 <script>
 import axios from "axios";
+import { ElMessage } from 'element-plus'
+
+
 
 export default {
     name: "TeacherPages",
@@ -195,7 +228,7 @@ export default {
             }
             catch (error) {
                 console.error("选课信息查询失败", error);
-                alert("选课信息查询失败");
+                ElMessage.error("选课信息查询失败");
             }
         },
 
@@ -222,7 +255,7 @@ export default {
             }
             catch (error) {
                 console.error("选课信息查询失败", error);
-                alert("选课信息查询失败");
+                ElMessage.error("选课信息查询失败");
             }
         },
 
@@ -246,16 +279,16 @@ export default {
                 // 返回状态码为200，表示上传成功
                 if (response.status === 200) {
                     console.log("成绩上传成功", response.data);
-                    alert("成绩上传成功");
+                    ElMessage.success("成绩上传成功");
                 }
                 else {
                     console.error("成绩上传失败", response.data);
-                    alert("成绩上传失败");
+                    ElMessage.error("成绩上传失败");
                 }
             }
             catch (error) {
                 console.error("成绩上传失败", error);
-                alert("成绩上传失败");
+                ElMessage.error("成绩上传失败");
             }
         },
 

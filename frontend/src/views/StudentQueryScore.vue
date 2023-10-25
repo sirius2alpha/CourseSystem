@@ -1,32 +1,24 @@
 <template>
     <div>
-        <form>
-            <table class="course-table">
-                <tr>
-                    <th>课程号</th>
-                    <th>课程名</th>
-                    <th>教师姓名</th>
-                    <th>分数</th>
-                </tr>
-                <tr v-for="course in myCourses" :key="course.course_id">
-                    <td>{{ course.course_id }}</td>
-                    <td>{{ course.course_name }}</td>
-                    <td>{{ course.teacher_name }}</td>
-                    <td>{{ course.score }}</td>
-                </tr>
-            </table>
-        </form>
+        <el-form>
+            <el-table :data="myCourses" >
+                <el-table-column prop="course_id" label="课程号" width="180" />
+                <el-table-column prop="course_name" label="课程名" width="180" />
+                <el-table-column prop="teacher_name" label="教师姓名" width="180" />
+                <el-table-column prop="score" label="分数" width="180" />
+            </el-table>
+        </el-form>
     </div>
 </template>
 
 <script>
 export default {
-    name:"studentQueryScore",
+    name: "studentQueryScore",
     props: {
         myCourses: {
             type: Array,
-            required: true
-        }
-    }
+            required: true,
+        },
+    },
 };
 </script>
