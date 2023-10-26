@@ -49,7 +49,7 @@ public class CodeGenerator {
         dsc.setUrl("jdbc:mysql://localhost:3306/course-system?allowPublicKeyRetrieval=true&useSSL=false");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("Xie20021008");
+        dsc.setPassword("132239");
         mpg.setDataSource(dsc);
 
         //包配置
