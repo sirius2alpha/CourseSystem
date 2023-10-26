@@ -142,15 +142,15 @@ public class SelectcourseController {
         return list.size()>0?Result.suc(response):Result.fail();
     }
 
-    @GetMapping("/students/{userId}/courses")
-    public Result seletedclass(@PathVariable("userId") String userId)
+    @PostMapping("/students/courses")
+    public Result selectedclass(@RequestBody SelectedCourses selectedCourses)
     {
-        Integer userid = Integer.valueOf(userId);
-        System.out.println(userid);
+        Integer courseId=selectedCourses.getCurrentCourse_id();
         List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
-                .eq(SelectedCourses::getStudent_id,userid).list();
+                .eq(SelectedCourses::getCurrentCourse_id,courseId).list();
         if(selectno.size()==0)
             return Result.fail();
+        /*
         List<LinkedHashMap> response=new ArrayList<>();
         int courseno,courseid,teacherid;
         for(int i=0;i<selectno.size();i++)
@@ -176,6 +176,8 @@ public class SelectcourseController {
             res.put("course_time",list.get(0).getTime());
             response.add(i,res);
         }
-        return Result.suc(response);
+
+         */
+        return Result.suc(selectno);
     }
 }
