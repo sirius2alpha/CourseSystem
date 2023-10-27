@@ -25,9 +25,9 @@ public class SelectedCourses implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ApiModelProperty
-    private Integer student_id;
+    private Integer studentId;
     @ApiModelProperty
-    private Integer currentCourse_id;
+    private Integer currentCourseId;
     @ApiModelProperty
     private Double pscj;
     @ApiModelProperty

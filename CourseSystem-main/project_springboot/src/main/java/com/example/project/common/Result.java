@@ -7,26 +7,26 @@ public class Result {
 
     private int code;//编码 200/400
     private String msg;//成功/失败
-    private Long total;//总记录数
+    private int total;//总记录数
     private Object data;//数据
 
     public static Result fail(){
-        return result(401,"失败",0L,null);
+        return result(401,"失败",0,null);
     }
 
     public static Result suc(){
-        return result(200,"成功",0L,null);
+        return result(200,"成功",0,null);
     }
 
     public static Result suc(Object data){
-        return result(200,"成功",0L,data);
+        return result(200,"成功",0,data);
     }
 
-    public static Result suc(Object data,Long total){
+    public static Result suc(Object data,int total){
         return result(200,"成功",total,data);
     }
 
-    private static Result result(int code,String msg,Long total,Object data){
+    private static Result result(int code,String msg,int total,Object data){
         Result res=new Result();
         res.setData(data);
         res.setMsg(msg);
