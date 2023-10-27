@@ -17,9 +17,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.sql.Types.NULL;
+
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author ge
@@ -28,6 +33,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class SelectcourseController {
+    private static final Logger logger = LoggerFactory.getLogger(SelectcourseController.class);
 
     @Autowired
     private CurrentCoursesService currentCoursesService;
@@ -42,7 +48,7 @@ public class SelectcourseController {
     private TeachersService teachersService;
 
     @GetMapping("/list")
-    public List<CurrentCourses> list(){
+    public List<CurrentCourses> list() {
         return currentCoursesService.list();
     }
 
@@ -63,12 +69,6 @@ public class SelectcourseController {
         String teachername = teacher_name;
         String coursetime = course_time;
 
-        // 你可以在这里使用 logger 打印日志
-        //logger.info("course_id: " + course_id);
-        //logger.info("course_name: " + course_name);
-        //logger.info("teacher_id: " + teacher_id);
-        //logger.info("teacher_name: " + teacher_name);
-        //logger.info("course_time: " + course_time);
 
         // new
         /*
@@ -208,12 +208,49 @@ public class SelectcourseController {
     }
 
 
+    /*
     @PostMapping("/students/{userId}/courses")
     public Result selectedclass(@PathVariable("userId") Integer userId)
     {
         List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
                 .eq(SelectedCourses::getStudentId,userId).list();
         if(selectno.size()==0)
+            return Result.fail();
+        List<LinkedHashMap> response = new ArrayList<>();
+        Integer no;
+
+        for (int i = 0; i < list.size(); i++) {
+            LinkedHashMap res = new LinkedHashMap();
+            courseid = list.get(i).getCourseId();
+            res.put("course_id", courseid);
+            List<CoursePlan> coursesname = coursePlanService.lambdaQuery()
+                    .eq(CoursePlan::getCourseId, courseid).list();
+            res.put("course_name", coursesname.get(0).getCourseName());
+            teacherid = list.get(i).getTeacherId();
+            res.put("teacher_id", teacherid);
+            List<Teachers> teachersname = teachersService.lambdaQuery()
+                    .eq(Teachers::getId, teacherid).list();
+            res.put("teacher_name", teachersname.get(0).getName());
+            res.put("capacity", 50);
+            no = list.get(i).getNo();
+            List<SelectedCourses> selectno = selectedCoursesService.lambdaQuery()
+                    .eq(SelectedCourses::getCurrentCourse_id, no).list();
+            res.put("selected_number", selectno.size());
+            res.put("course_time", list.get(i).getTime());
+            response.add(i, res);
+        }
+
+        return list.size() > 0 ? Result.suc(response) : Result.fail();
+    }
+
+     */
+
+    @PostMapping("/students/courses")
+    public Result selectedclass(@RequestBody SelectedCourses selectedCourses) {
+        Integer courseId = selectedCourses.getCurrentCourseId();
+        List<SelectedCourses> selectno = selectedCoursesService.lambdaQuery()
+                .eq(SelectedCourses::getCurrentCourseId, courseId).list();
+        if (selectno.size() == 0)
             return Result.fail();
         List<String> response=new ArrayList<>();
         int courseno,courseid,teacherid;

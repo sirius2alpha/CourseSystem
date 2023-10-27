@@ -129,7 +129,7 @@
     </el-container>
   </div>
 </template>
-  
+
 <script>
 import axios from "axios";
 
@@ -168,7 +168,7 @@ export default {
       queryInfo: {
         CourseId: null,
         CourseName: null,
-        TeacherId: null,
+        TeacherId: 100027,
         TeacherName: null,
         CourseTime: null,
       },
@@ -244,14 +244,11 @@ export default {
         teacher_name: teacher_name,
         course_time: course_time
       };
-
-      try {
-        // 发送 GET 请求
-        const response = await axios.get(apiUrl, { params: queryParams });
-        console.log("选课信息查询成功", response.data);
-        console.log(response.data.data[0]);
-        console.log(JSON.parse(response.data.data[0]));
-        // 将查询选课的结果显示到页面上
+      axios.get(apiUrl, { params: queryParams })
+        .then(response => {
+          // 处理响应数据
+          console.log("选课信息查询成功", response.data);
+          // 将查询选课的结果显示到页面上
 
         // 用JSON.parse()方法将字符串转换为JSON对象
         const courseData = JSON.parse(response.data.data[0]);
@@ -281,8 +278,7 @@ export default {
         // 用JSON.parse()方法将字符串转换为JSON对象
         const courseData = JSON.parse(response.data);
         this.myCourses = courseData;
-      }
-      catch (error) {
+      } catch (error) {
         console.error("选课信息查询失败", error);
         ElMessage.error("选课信息查询失败");
       }
@@ -368,7 +364,7 @@ export default {
   },
 };
 </script>
-  
+
 <style>
 .top-bar {
   background: #208fcb;
