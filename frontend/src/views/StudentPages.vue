@@ -249,12 +249,15 @@ export default {
         // 发送 GET 请求
         const response = await axios.get(apiUrl, { params: queryParams });
         console.log("选课信息查询成功", response.data);
+        console.log(response.data.data[0]);
+        console.log(JSON.parse(response.data.data[0]));
         // 将查询选课的结果显示到页面上
 
         // 用JSON.parse()方法将字符串转换为JSON对象
-        const courseData = JSON.parse(response.data.data);
-        this.courseInfo = courseData;
-        this.showForm = true; // 显示表单组件
+        const courseData = JSON.parse(response.data.data[0]);
+        console.log(courseData);
+        //this.courseInfo = courseData;
+        //this.showForm = true; // 显示表单组件
 
       }
       catch (error) {
@@ -273,6 +276,7 @@ export default {
         // 发送 GET 请求
         const response = await axios.get(apiUrl);
         console.log("选课信息查询成功", response.data);
+        
 
         // 用JSON.parse()方法将字符串转换为JSON对象
         const courseData = JSON.parse(response.data);
