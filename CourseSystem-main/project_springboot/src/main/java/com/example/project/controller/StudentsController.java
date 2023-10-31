@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author ge
- * @since 2023-10-20
+ * @since 2023-10-23
  */
 @RestController
-@RequestMapping("/course-plan")
-public class CoursePlanController {
+@RequestMapping("/students")
+public class StudentsController {
 
 }

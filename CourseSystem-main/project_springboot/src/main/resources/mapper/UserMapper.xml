@@ -22,5 +22,3 @@
         SELECT * from users ${ew.customSqlSegment}
     </select>
 </mapper>
-
-

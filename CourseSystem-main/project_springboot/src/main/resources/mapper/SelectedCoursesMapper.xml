@@ -4,12 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.project.entity.SelectedCourses">
-        <id column="student_id" property="student_id" />
-        <id column="currentCourse_id" property="current_course_id"/>
+        <id column="student_id" property="studentId" />
+        <result column="current_course_id" property="currentCourseId" />
         <result column="pscj" property="pscj" />
         <result column="kscj" property="kscj" />
         <result column="score" property="score" />
     </resultMap>
 
-</mapper>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        student_id, current_course_id, pscj, kscj, score
+    </sql>
 
+</mapper>

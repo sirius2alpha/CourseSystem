@@ -1,18 +1,15 @@
 package com.example.project.entity;
 
-import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author ge
@@ -20,20 +17,36 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SelectedCourses对象", description="")
+@ApiModel(value = "SelectedCourses对象", description = "")
 public class SelectedCourses implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty
-    private Integer student_id;
-    @ApiModelProperty
-    private Integer currentCourse_id;
-    @ApiModelProperty
+    /**
+     * 学生编号
+     */
+    private Integer studentId;
+    /**
+     * 学生姓名
+     */
+    @TableField(exist = false)
+    private String studentName;
+    /**
+     * 课程编号
+     */
+    private Integer currentCourseId;
+
+    @TableField(exist = false)
+    private String courseName;
+    /**
+     * 平时成绩
+     */
     private Double pscj;
-    @ApiModelProperty
+    /**
+     * 考试成绩
+     */
     private Double kscj;
-    @ApiModelProperty
+    /**
+     *
+     */
     private Double score;
-
-
 }

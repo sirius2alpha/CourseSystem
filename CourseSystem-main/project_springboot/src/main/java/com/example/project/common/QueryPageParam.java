@@ -3,6 +3,7 @@ package com.example.project.common;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class QueryPageParam {

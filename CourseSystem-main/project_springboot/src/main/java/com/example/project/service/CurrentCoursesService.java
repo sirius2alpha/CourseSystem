@@ -1,9 +1,5 @@
 package com.example.project.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.project.entity.CoursePlan;
 import com.example.project.entity.CurrentCourses;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,11 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author ge
- * @since 2023-10-22
+ * @since 2023-10-23
  */
 public interface CurrentCoursesService extends IService<CurrentCourses> {
 
-    IPage pageC(Page<CurrentCourses> page);
-
-    IPage pageCC(Page<CurrentCourses> page, Wrapper wrapper);
 }

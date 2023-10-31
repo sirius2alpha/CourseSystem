@@ -12,12 +12,12 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author ge
- * @since 2023-10-20
+ * @since 2023-10-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Teachers对象", description="")
-public class Teachers implements Serializable {
+@ApiModel(value="Students对象", description="")
+public class Students implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
