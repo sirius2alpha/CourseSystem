@@ -335,14 +335,14 @@ public class SelectcourseController {
             List<CurrentCourses> list = currentCoursesService.lambdaQuery()
                     .eq(CurrentCourses::getNo, no).list();
             courseid = list.get(0).getCourseId();
-            courseScore.setCourseId(courseid);
+            courseScore.setCourse_id(courseid);
             List<CoursePlan> coursesname = coursePlanService.lambdaQuery()
                     .eq(CoursePlan::getCourseId, courseid).list();
-            courseScore.setCourseName(coursesname.get(0).getCourseName());
+            courseScore.setCourse_name(coursesname.get(0).getCourseName());
             teacherid = list.get(0).getTeacherId();
             List<Teachers> teachersname = teachersService.lambdaQuery()
                     .eq(Teachers::getId, teacherid).list();
-            courseScore.setTeacherName(teachersname.get(0).getName());
+            courseScore.setTeacher_name(teachersname.get(0).getName());
             courseScore.setScore(selectno.get(i).getScore());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courseScore);
