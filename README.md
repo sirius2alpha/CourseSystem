@@ -1,6 +1,6 @@
 # CourseSystem
 ## 技术栈
-vue + axios + springboot + mysql
+Vue3 + Elemrnt Plus + axios + springboot + +mysql
 
 ## 前端
 前端相关内容在文件夹frontend下
@@ -12,6 +12,8 @@ vue + axios + springboot + mysql
 执行命令`npm run serve`启动项目
 
 ## 后端
+
+
 
 ## 数据库
 数据库SQL文件course-system.sql直接用数据库软件执行之后本地就可以得到一个数据库了，方便开发测试用
