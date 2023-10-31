@@ -46,7 +46,7 @@ export default {
     return {
       userId: "231295",
       password: "123456",
-      host:"http://127.0.0.1:9000",
+      host: "http://127.0.0.1:9000",
     };
   },
 
@@ -68,38 +68,40 @@ export default {
       try {
         // 发送 POST 请求
         const response = await axios.post(apiUrl, requestBody);
-        if(response.data.code !== 200){
+
+        // 处理返回码不为200的时候，提示登录失败
+        if (response.data.code !== 200) {
           ElMessage.error("登录失败，请检查账号和密码是否正确");
           return;
         }
+
+        // 处理登录成功后的逻辑
         ElMessage.success("登录成功");
         console.log("登录成功", response.data.data.roleId);
-        // 处理登录成功后的逻辑
-        if(response.data.data.roleId === 1){
-          this.$router.push('students');
+        if (response.data.data.roleId === 1) {
+          this.$router.push({ name: 'students', props: { userId: id, userName: response.data.data.userName } });
+        } else {
+          this.$router.push({ name: 'teachers', props: { userId: id, userName: response.data.data.userName } });
         }
-        else{
-          this.$router.push('teachers');
-        }
-      } 
+
+      }
       catch (error) {
         console.error("登录失败", error);
-        // 处理登录失败后的逻辑
-        // 提示输入密码错误
-        ElMessage.error("登录失败，请检查账号和密码是否正确");
+        ElMessage.error("登录失败");
 
       }
     },
-    
+
     jumpStudents() {
-      this.$router.push('students');
+      this.$router.push({ name: 'students', params: { userId: this.userId, password: this.password } });
     },
 
-    jumpTeachers(){
-      this.$router.push('teachers');
+    jumpTeachers() {
+      this.$router.push({ name: 'teachers', params: { userId: this.userId, password: this.password } });
     }
   },
-};
+
+}
 </script>
 
 <style scoped>

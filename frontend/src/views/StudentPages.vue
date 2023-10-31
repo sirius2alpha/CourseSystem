@@ -16,9 +16,9 @@
               <div class="flex items-center">
                 <el-avatar :size="32" class="mr-3"
                   src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                <span class="text-lg font-semibold mr-3"> 袁浩 </span>
+                <span class="text-lg font-semibold mr-3">{{ this.userName }}</span>
                 <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
-                  21122453
+                  {{ this.userId }}
                 </span>
                 <el-tag type="success">学生</el-tag>
               </div>
@@ -155,6 +155,22 @@ export default {
       type: String,
       required: true,
     },
+
+  },
+
+  // 计算属性
+  computed: {
+
+  },
+
+  created() {
+    // 在created生命周期钩子中访问路由参数
+    /*
+    console.log("this.$route",this.$route);
+    this.userId = this.$route.params.userId;
+    this.userName = this.$route.params.userName;
+    console.log("userId", this.userId);
+    console.log("userName", this.userName);*/
   },
 
   // data()函数部分
@@ -228,6 +244,9 @@ export default {
 
     // 查询功能
     async queryCourses() {
+      console.log("userId", this.userId);
+      console.log("userName", this.userName);
+
       // 把v-model数据保存到变量中
       const course_id = this.queryInfo.CourseId;
       const course_name = this.queryInfo.CourseName;
@@ -306,7 +325,7 @@ export default {
     // 更新选课功能中的选中课程到selectedCourse
     handleSelectionChange(selectedRows) {
       console.log("selectedRows:", selectedRows);
-      this.selectedCourse = selectedRows.map(row => ({...row}));
+      this.selectedCourses = selectedRows;
     },
 
     // 选课功能
