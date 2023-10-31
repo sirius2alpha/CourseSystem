@@ -80,12 +80,12 @@ export default {
         console.log("登录成功", response.data.data.roleId);
         if (response.data.data.roleId === 1) {
           this.$router.push({name: 'students',params: {userId: id,
-              //userName: response.data.data.userName
-              userName: this.userName
+              userName: response.data.data.userName
+              //userName: this.userName
             }
           });
         } else {
-          this.$router.push({name: 'teachers', params: {userId: id, userName: this.userName}});
+          this.$router.push({name: 'teachers', params: {userId: id, userName: response.data.data.userName}});
         }
 
       }

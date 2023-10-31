@@ -147,17 +147,7 @@ export default {
 
   // 来自父组件的数据
   props: {
-    /* userId: {
-       type: String,
-       required: true,
-       default:'231295'
-     },
-     userName: {
-       type: String,
-       required: true,
-       default:'未完成'
-     },
- */
+
   },
 
   created() {
@@ -305,15 +295,15 @@ export default {
       try {
         // 发送 GET 请求
         const response = await axios.get(apiUrl);
-        console.log("选课信息查询成功", response.data);
 
+        console.log("return from fetchCourses, response: ", response.data);
 
-        // 用JSON.parse()方法将字符串转换为JSON对象
-        const courseData = JSON.parse(response.data);
+        const courseData = response.data;
         this.myCourses = courseData;
+
       } catch (error) {
-        console.error("选课信息查询失败", error);
-        ElMessage.error("选课信息查询失败");
+        console.error("课表信息查询失败", error);
+        ElMessage.error("课表信息查询失败");
       }
     },
 

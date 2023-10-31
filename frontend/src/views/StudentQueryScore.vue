@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form>
-            <el-table :data="myCourses" >
+            <el-table :data="quizCourses">
                 <el-table-column prop="course_id" label="课程号" width="180" />
                 <el-table-column prop="course_name" label="课程名" width="180" />
                 <el-table-column prop="teacher_name" label="教师姓名" width="180" />
@@ -20,5 +20,36 @@ export default {
             required: true,
         },
     },
+    data() {
+        return {
+            quizCourses: [
+                {
+                    course_id: "1",
+                    course_name: "123",
+                    teacher_name: "123",
+                    score: "1",
+                },
+                {
+                    course_id: "2",
+                    course_name: "123",
+                    teacher_name: "123",
+                    score: "2",
+                },
+                {
+                    course_id: "3",
+                    course_name: "123",
+                    teacher_name: "123",
+                    score: "3",
+                },
+                {
+                    course_id: "4",
+                    course_name: "123",
+                    teacher_name: "123",
+                    score: "4",
+                }
+            ]
+        }
+    }
+
 };
 </script>
