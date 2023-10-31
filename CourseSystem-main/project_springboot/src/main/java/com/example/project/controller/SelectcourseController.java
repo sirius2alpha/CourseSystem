@@ -319,10 +319,7 @@ public class SelectcourseController {
 
     @GetMapping("/students/{userId}/courses/score")
     public Result scoreclass(@PathVariable("userId") String userid) throws JsonProcessingException {
-        Integer j = null;
-        if(userid!=null){
-            j = Integer.valueOf(userid);
-        }
+
         List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
                 .eq(SelectedCourses::getStudentId,userid).list();
         if(selectno.size()==0)
@@ -337,20 +334,16 @@ public class SelectcourseController {
             no = selectno.get(i).getCurrentCourseId();
             List<CurrentCourses> list = currentCoursesService.lambdaQuery()
                     .eq(CurrentCourses::getNo, no).list();
-            courseid = list.get(i).getCourseId();
-            courseScore.setCourse_id(courseid);
+            courseid = list.get(0).getCourseId();
+            courseScore.setCourseId(courseid);
             List<CoursePlan> coursesname = coursePlanService.lambdaQuery()
                     .eq(CoursePlan::getCourseId, courseid).list();
-            courseScore.setCourse_name(coursesname.get(0).getCourseName());
-            teacherid = list.get(i).getTeacherId();
+            courseScore.setCourseName(coursesname.get(0).getCourseName());
+            teacherid = list.get(0).getTeacherId();
             List<Teachers> teachersname = teachersService.lambdaQuery()
                     .eq(Teachers::getId, teacherid).list();
-            courseScore.setTeacher_name(teachersname.get(0).getName());
-            no = list.get(i).getNo();
-            List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
-                    .eq(SelectedCourses::getCurrentCourseId, no)
-                    .eq(SelectedCourses::getStudentId,j).list();
-            courseScore.setScore(selectno1.get(0).getScore());
+            courseScore.setTeacherName(teachersname.get(0).getName());
+            courseScore.setScore(selectno.get(i).getScore());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courseScore);
             response.add(i,json);

@@ -70,8 +70,8 @@ public class UserController {
     @PostMapping("/{id}/pwd")
     public Result msg(@RequestBody User user){
         List<User> list = userService.lambdaQuery()
-                .eq(User::getId,user.getId()).list();
-                //.eq(User::getPassword,user.getPassword()).list();
+                .eq(User::getId,user.getId())
+                .eq(User::getPassword,user.getPassword()).list();
         if(list.size()<=0)
             return Result.fail();
         LinkedHashMap usermap=new LinkedHashMap<>();

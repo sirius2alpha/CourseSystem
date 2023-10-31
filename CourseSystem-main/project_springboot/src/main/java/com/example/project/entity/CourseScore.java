@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class CourseScore {
-    private Integer course_id;
-    private String course_name;
-    private String teacher_name;
+    private Integer courseId;
+    private String courseName;
+    private String teacherName;
     private Double score;
 }
