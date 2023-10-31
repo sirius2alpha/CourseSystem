@@ -7,12 +7,17 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.project.common.QueryPageParam;
 import com.example.project.common.Result;
+import com.example.project.entity.Students;
+import com.example.project.entity.Teachers;
 import com.example.project.entity.User;
+import com.example.project.service.StudentsService;
+import com.example.project.service.TeachersService;
 import com.example.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -28,6 +33,13 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TeachersService teachersService;
+
+    @Autowired
+    private StudentsService studentsService;
+
     @GetMapping("/list")
     public List<User> list(){
         return userService.list();
@@ -58,9 +70,24 @@ public class UserController {
     @PostMapping("/{id}/pwd")
     public Result msg(@RequestBody User user){
         List<User> list = userService.lambdaQuery()
-                .eq(User::getId,user.getId())
-                .eq(User::getPassword,user.getPassword()).list();
-        return list.size()>0?Result.suc(list.get(0)):Result.fail();
+                .eq(User::getId,user.getId()).list();
+                //.eq(User::getPassword,user.getPassword()).list();
+        if(list.size()<=0)
+            return Result.fail();
+        LinkedHashMap usermap=new LinkedHashMap<>();
+        usermap.put("roleId",list.get(0).getRoleId());
+        if(list.get(0).getRoleId()==1){
+            List<Students> stulist=studentsService.lambdaQuery()
+                    .eq(Students::getId,user.getId()).list();
+            usermap.put("userName",stulist.get(0).getName());
+        }
+        else {
+            List<Teachers> tealist = teachersService.lambdaQuery()
+                    .eq(Teachers::getId, user.getId()).list();
+            usermap.put("userName",tealist.get(0).getName());
+        }
+
+        return Result.suc(usermap);
     }
 
    /* @PostMapping("/listP")
