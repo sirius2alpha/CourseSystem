@@ -15,7 +15,7 @@
             <div class="flex items-center justify-end h-full">
               <div class="flex items-center">
                 <el-avatar :size="32" class="mr-3"
-                           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+                  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
                 <span class="text-lg font-semibold mr-3"> 袁浩 </span>
                 <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
                   21122453
@@ -80,7 +80,7 @@
               </div>
 
               <div v-if="showForm">
-                <el-table :data="courseInfo" style="width: 100%">
+                <el-table :data="courseInfo" style="width: 100%" @selection-change="handleSelectionChange">
                   <el-table-column type="selection"></el-table-column>
                   <el-table-column prop="course_id" label="课程号"></el-table-column>
                   <el-table-column prop="course_name" label="课程名"></el-table-column>
@@ -136,7 +136,7 @@ import axios from "axios";
 import StudentQueryScore from "./StudentQueryScore.vue";
 import CourseSchedule from "../components/CourseSchedule.vue";
 
-import {ElMessage} from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: "StudentPages",
@@ -244,42 +244,42 @@ export default {
         teacher_name: teacher_name,
         course_time: course_time
       };
-      axios.get(apiUrl, {params: queryParams})
-          .then(response => {
+      axios.get(apiUrl, { params: queryParams })
+        .then(response => {
 
-            // 将查询选课的结果显示到页面上
-            const courseData = response.data.data;
+          // 将查询选课的结果显示到页面上
+          const courseData = response.data.data;
 
-            // 把courseData中的数据传递给this.courseInfo
-            if (courseData != null) {
-              // 显示响应结果
-              ElMessage.success('选课信息查询成功');
-              console.log("选课信息respinse.data", response.data);
-              console.log("courseData", courseData);
-              this.courseInfo = courseData.map((course) => {
-                const selectedCourse = JSON.parse(course);
-                return {
-                  course_id: selectedCourse.course_id,
-                  course_name: selectedCourse.course_name,
-                  teacher_id: selectedCourse.teacher_id,
-                  teacher_name: selectedCourse.teacher_name,
-                  capacity: selectedCourse.capacity,
-                  selected_number: selectedCourse.selected_number,
-                  time: selectedCourse.time
-                };
-              });
-              this.showForm = true;
-            } else {
-              ElMessage.error('选课信息查询失败');
-            }
-            console.log(" this.courseInfo", this.courseInfo);
-            // 显示表单组件
+          // 把courseData中的数据传递给this.courseInfo
+          if (courseData != null) {
+            // 显示响应结果
+            ElMessage.success('选课信息查询成功');
+            console.log("选课信息respinse.data", response.data);
+            console.log("courseData", courseData);
+            this.courseInfo = courseData.map((course) => {
+              const selectedCourse = JSON.parse(course);
+              return {
+                course_id: selectedCourse.course_id,
+                course_name: selectedCourse.course_name,
+                teacher_id: selectedCourse.teacher_id,
+                teacher_name: selectedCourse.teacher_name,
+                capacity: selectedCourse.capacity,
+                selected_number: selectedCourse.selected_number,
+                time: selectedCourse.time
+              };
+            });
+            this.showForm = true;
+          } else {
+            ElMessage.error('选课信息查询失败');
+          }
+          console.log(" this.courseInfo", this.courseInfo);
+          // 显示表单组件
 
-          }, error => {
-            // 处理响应失败的情况
-            console.error("选课信息查询失败", error);
-            ElMessage.error('选课信息查询失败')
-          })
+        }, error => {
+          // 处理响应失败的情况
+          console.error("选课信息查询失败", error);
+          ElMessage.error('选课信息查询失败')
+        })
     },
 
     // 查询已选课程
@@ -301,6 +301,12 @@ export default {
         console.error("选课信息查询失败", error);
         ElMessage.error("选课信息查询失败");
       }
+    },
+
+    // 更新选课功能中的选中课程到selectedCourse
+    handleSelectionChange(selectedRows) {
+      console.log("selectedRows:", selectedRows);
+      this.selectedCourse = selectedRows.map(row => ({...row}));
     },
 
     // 选课功能
