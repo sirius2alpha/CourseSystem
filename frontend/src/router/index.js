@@ -8,19 +8,14 @@ const routes = [
     component: IndexLogin
   },
   {
-    path: '/students',
+    path: '/students/:userId/:userName',
     name: 'students',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('../views/StudentPages.vue'),
-    props: (route) => ({ userId: route.query.userId, userName: route.query.userName })
   },
   {
     path: '/teachers',
     name: 'teachers',
     component: () => import('../views/TeacherPages.vue'),
-    props: (route) => ({ userId: route.query.userId, userName: route.query.userName })
 
   },
 ]

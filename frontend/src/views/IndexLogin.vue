@@ -22,7 +22,6 @@
     </div>
     <!-- bind the method "login" on the input -->
     <input type="button" value="登录" @click="login">
-    <input type="button" value="学生页面" @click="jumpStudents">
     <input type="button" value="老师页面" @click="jumpTeachers">
 
   </div>
@@ -46,6 +45,7 @@ export default {
     return {
       userId: "231295",
       password: "123456",
+      userName: "default",
       host: "http://127.0.0.1:9000",
     };
   },
@@ -79,9 +79,13 @@ export default {
         ElMessage.success("登录成功");
         console.log("登录成功", response.data.data.roleId);
         if (response.data.data.roleId === 1) {
-          this.$router.push({ name: 'students', props: { userId: id, userName: response.data.data.userName } });
+          this.$router.push({name: 'students',params: {userId: id,
+              //userName: response.data.data.userName
+              userName: this.userName
+            }
+          });
         } else {
-          this.$router.push({ name: 'teachers', props: { userId: id, userName: response.data.data.userName } });
+          this.$router.push({name: 'teachers', params: {userId: id, userName: this.userName}});
         }
 
       }
@@ -90,10 +94,6 @@ export default {
         ElMessage.error("登录失败");
 
       }
-    },
-
-    jumpStudents() {
-      this.$router.push({ name: 'students', params: { userId: this.userId, password: this.password } });
     },
 
     jumpTeachers() {
@@ -151,5 +151,4 @@ export default {
   margin: 20px;
   margin-left: 15px;
   margin-bottom: 5px;
-}
-</style>
+}</style>

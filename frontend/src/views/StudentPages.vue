@@ -147,30 +147,26 @@ export default {
 
   // 来自父组件的数据
   props: {
-    userId: {
-      type: String,
-      required: true,
-    },
-    userName: {
-      type: String,
-      required: true,
-    },
-
-  },
-
-  // 计算属性
-  computed: {
-
+    /* userId: {
+       type: String,
+       required: true,
+       default:'231295'
+     },
+     userName: {
+       type: String,
+       required: true,
+       default:'未完成'
+     },
+ */
   },
 
   created() {
     // 在created生命周期钩子中访问路由参数
-    /*
-    console.log("this.$route",this.$route);
+    // console.log("this.$route",this.$route);
     this.userId = this.$route.params.userId;
     this.userName = this.$route.params.userName;
-    console.log("userId", this.userId);
-    console.log("userName", this.userName);*/
+    // console.log("userId", this.userId);
+    // console.log("userName", this.userName);
   },
 
   // data()函数部分
@@ -244,9 +240,6 @@ export default {
 
     // 查询功能
     async queryCourses() {
-      console.log("userId", this.userId);
-      console.log("userName", this.userName);
-
       // 把v-model数据保存到变量中
       const course_id = this.queryInfo.CourseId;
       const course_name = this.queryInfo.CourseName;
@@ -273,8 +266,10 @@ export default {
           if (courseData != null) {
             // 显示响应结果
             ElMessage.success('选课信息查询成功');
-            console.log("选课信息respinse.data", response.data);
-            console.log("courseData", courseData);
+
+            console.log("queryCourses method return response.data", response.data);
+            // console.log("response.data.data: courseData", courseData);
+
             this.courseInfo = courseData.map((course) => {
               const selectedCourse = JSON.parse(course);
               return {
@@ -291,7 +286,7 @@ export default {
           } else {
             ElMessage.error('选课信息查询失败');
           }
-          console.log(" this.courseInfo", this.courseInfo);
+          console.log("this.courseInfo", this.courseInfo);
           // 显示表单组件
 
         }, error => {
@@ -324,7 +319,7 @@ export default {
 
     // 更新选课功能中的选中课程到selectedCourse
     handleSelectionChange(selectedRows) {
-      console.log("selectedRows:", selectedRows);
+      console.log("选中的课程 selectedRows:", selectedRows);
       this.selectedCourses = selectedRows;
     },
 
@@ -333,7 +328,7 @@ export default {
       try {
         // 创建一个空数组，用于存储请求体数据
         const requestBody = [];
-        console.log("selectedCourses", this.selectedCourses);
+        // console.log("selectedCourses", this.selectedCourses);
 
         // 使用 forEach 方法遍历 selectedCourses 数组
         this.selectedCourses.forEach((course) => {
@@ -349,19 +344,24 @@ export default {
           });
         });
 
-        console.log("requestBody", requestBody);
+        console.log("选课请求发送的 requestBody", requestBody);
 
         const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
         const response = await axios.post(apiUrl, requestBody);
 
-        console.log("response: ", response);
+        console.log("selectCourses return response: ", response);
 
-        const result = JSON.parse(response.data);
-        if (result.success) {
+        const result = response.data;
+        if (result.code==200) {
           ElMessage.success("选课成功");
           this.selectedCourses = []; // 清空已选课程
           this.fetchCourses(); // 重新查询课表
-        } else {
+        } 
+        else if(result.code==401){
+          ElMessage.warning("该课程已选");
+        }
+        else 
+        {
           ElMessage.error("选课失败：" + result.message);
         }
       } catch (error) {
