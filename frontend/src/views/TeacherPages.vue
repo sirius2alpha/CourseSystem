@@ -50,29 +50,16 @@
                 <div class="main-content-right">
 
                     <div v-if="selectedFunction === '开课详情'">
-                        <!--信息保存在courseInfo中-->
-                        <table class="course-table">
-                            <tr>
-                                <th>课程号</th>
-                                <th>课程名</th>
-                                <th>教师号</th>
-                                <th>教师姓名</th>
-                                <th>课程容量</th>
-                                <th>已选人数</th>
-                                <th>上课时间</th>
-                            </tr>
-                            <tr v-for="course in courseInfo" :key="course.course_id">
-                                <td>{{ course.course_id }}</td>
-                                <td>{{ course.course_name }}</td>
-                                <td>{{ course.teacher_id }}</td>
-                                <td>{{ course.teacher_name }}</td>
-                                <td>{{ course.capacity }}</td>
-                                <td>{{ course.selected_number }}</td>
-                                <td>{{ course.time }}</td>
-                            </tr>
-                        </table>
+                        <el-table :data="courseInfo" style="width: 100%">
+                            <el-table-column prop="course_id" label="课程号" />
+                            <el-table-column prop="course_name" label="课程名" />
+                            <el-table-column prop="teacher_id" label="教师号" />
+                            <el-table-column prop="teacher_name" label="教师姓名" />
+                            <el-table-column prop="capacity" label="课程容量" />
+                            <el-table-column prop="selected_number" label="已选人数" />
+                            <el-table-column prop="time" label="上课时间" />
+                        </el-table>
                     </div>
-
                     <div v-else-if="selectedFunction === '成绩录入'">
                         <!--根据开课详情中的班级信息，可以进行筛选，录入成绩-->
                         <!--根据courseInfo的课程名字做一个选择框-->

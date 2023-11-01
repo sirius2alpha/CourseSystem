@@ -1,13 +1,11 @@
 <template>
     <div>
-        <el-form>
-            <el-table :data="quizCourses">
-                <el-table-column prop="course_id" label="课程号" width="180" />
-                <el-table-column prop="course_name" label="课程名" width="180" />
-                <el-table-column prop="teacher_name" label="教师姓名" width="180" />
-                <el-table-column prop="score" label="分数" width="180" />
-            </el-table>
-        </el-form>
+        <el-table :data="myCourses" style="width: 100%" :header-cell-style="{ 'text-align': 'center' }" border>
+            <el-table-column prop="course_id" label="课程号" align="center" />
+            <el-table-column prop="course_name" label="课程名" align="center" />
+            <el-table-column prop="teacher_name" label="教师姓名" align="center" />
+            <el-table-column prop="score" label="分数" align="center" />
+        </el-table>
     </div>
 </template>
 
@@ -50,6 +48,7 @@ export default {
             ]
         }
     }
-
 };
 </script>
+
+<style scoped></style>
