@@ -226,22 +226,22 @@ public class SelectcourseController {
             no = selectno.get(i).getCurrentCourseId();
             List<CurrentCourses> list = currentCoursesService.lambdaQuery()
                     .eq(CurrentCourses::getNo, no).list();
-            courseid = list.get(i).getCourseId();
+            courseid = list.get(0).getCourseId();
             courses.setCourse_id(courseid);
             List<CoursePlan> coursesname = coursePlanService.lambdaQuery()
                     .eq(CoursePlan::getCourseId, courseid).list();
             courses.setCourse_name(coursesname.get(0).getCourseName());
-            teacherid = list.get(i).getTeacherId();
+            teacherid = list.get(0).getTeacherId();
             courses.setTeacher_id(teacherid);
             List<Teachers> teachersname = teachersService.lambdaQuery()
                     .eq(Teachers::getId, teacherid).list();
             courses.setTeacher_name(teachersname.get(0).getName());
             courses.setCapacity(50);
-            no = list.get(i).getNo();
+            no = list.get(0).getNo();
             List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
                     .eq(SelectedCourses::getCurrentCourseId, no).list();
             courses.setSelected_number(selectno1.size());
-            courses.setTime(list.get(i).getTime());
+            courses.setTime(list.get(0).getTime());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courses);
             response.add(i,json);
