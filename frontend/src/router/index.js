@@ -13,7 +13,7 @@ const routes = [
     component: () => import('../views/StudentPages.vue'),
   },
   {
-    path: '/teachers',
+    path: '/teachers/:userId/:userName',
     name: 'teachers',
     component: () => import('../views/TeacherPages.vue'),
 

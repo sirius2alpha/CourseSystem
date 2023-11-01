@@ -5,21 +5,22 @@
                 <el-row>
 
                     <el-col :span="8">
-                        <div class="flex items-center justify-center h-full">
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
                             <span class="text-xl font-bold">聪明教务系统</span>
                         </div>
                     </el-col>
 
                     <el-col :span="8" :offset="8">
                         <div class="flex items-center justify-end h-full">
-                            <div class="flex items-center">
-                                <el-avatar :size="32" class="mr-3"
+                            <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                                <el-avatar :size="32" class="mr-4"
                                     src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                                <span class="text-lg font-semibold mr-3"> 袁浩 </span>
-                                <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
-                                    21122453
-                                </span>
-                                <el-tag type="success">教师</el-tag>
+                                <span class="text-lg font-semibold mr-5" style="margin-left: 20px ; margin-right: 10px;">{{
+                                    this.userName }}</span>
+                                <span class="text-sm mr-4"
+                                    style="color: var(--el-text-color-regular); position: relative; top: 2px;margin-right: 10px;">{{
+                                        this.userId }}</span>
+                                <el-tag type="success" class="ml-2">老师</el-tag>
                             </div>
                         </div>
                     </el-col>
@@ -129,14 +130,15 @@ export default {
 
     // 来自父组件的数据
     props: {
-        userId: {
-            type: String,
-            required: true,
-        },
-        userName: {
-            type: String,
-            required: true,
-        }
+    },
+
+    // 在created生命周期钩子中访问路由参数
+    created() {
+         console.log("this.$route",this.$route);
+        this.userId = this.$route.params.userId;
+        this.userName = this.$route.params.userName;
+         console.log("userId", this.userId);
+         console.log("userName", this.userName);
     },
 
     // data()函数部分
