@@ -16,8 +16,11 @@
               <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
                 <el-avatar :size="32" class="mr-4"
                   src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                <span class="text-lg font-semibold mr-5" style="margin-left: 20px ; margin-right: 10px;">{{ this.userName }}</span>
-                <span class="text-sm mr-4" style="color: var(--el-text-color-regular); position: relative; top: 2px;margin-right: 10px;">{{ this.userId }}</span>
+                <span class="text-lg font-semibold mr-5" style="margin-left: 20px ; margin-right: 10px;">{{ this.userName
+                }}</span>
+                <span class="text-sm mr-4"
+                  style="color: var(--el-text-color-regular); position: relative; top: 2px;margin-right: 10px;">{{
+                    this.userId }}</span>
                 <el-tag type="success" class="ml-2">学生</el-tag>
               </div>
             </div>
@@ -112,7 +115,7 @@
               </div>
             </div>
 
-            <div v-else-if="selectedFunction === '成绩查询'">
+            <div v-else-if="selectedFunction === '成绩查询'">+
               <StudentQueryScore :myCourses="myCourses"></StudentQueryScore>
             </div>
 
@@ -297,7 +300,8 @@ export default {
         console.log("return from fetchCourses, response: ", response.data);
 
         const courseData = response.data;
-        this.myCourses = courseData;
+        this.myCourses = courseData.data.map(course => JSON.parse(course));
+        console.log("this.myCourses", this.myCourses);
 
       } catch (error) {
         console.error("课表信息查询失败", error);
@@ -340,16 +344,15 @@ export default {
         console.log("selectCourses return response: ", response);
 
         const result = response.data;
-        if (result.code==200) {
+        if (result.code == 200) {
           ElMessage.success("选课成功");
           this.selectedCourses = []; // 清空已选课程
           this.fetchCourses(); // 重新查询课表
-        } 
-        else if(result.code==401){
+        }
+        else if (result.code == 401) {
           ElMessage.warning("该课程已选");
         }
-        else 
-        {
+        else {
           ElMessage.error("选课失败：" + result.message);
         }
       } catch (error) {

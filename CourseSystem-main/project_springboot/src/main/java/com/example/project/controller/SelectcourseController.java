@@ -286,7 +286,7 @@ public class SelectcourseController {
     }
 
 
-    @DeleteMapping("/students/{userId}/delete")
+    @DeleteMapping("/students/{userId}/courses")
     public Result delcourse(@RequestBody List<Courses> courses,
                             @PathVariable("userId") String userid)
     {
