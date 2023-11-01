@@ -35,7 +35,7 @@
           <el-menu default-active="1" class="el-menu-vertical-demo">
             <el-menu-item index="1" @click="selectFunction('选课')">选课</el-menu-item>
             <el-menu-item index="2" @click="selectFunction('退课'); fetchCourses()">退课</el-menu-item>
-            <el-menu-item index="3" @click="selectFunction('成绩查询')">成绩查询</el-menu-item>
+            <el-menu-item index="3" @click="selectFunction('成绩查询'); fetchScores()">成绩查询</el-menu-item>
             <el-menu-item index="4" @click="selectFunction('课表查询')">课表查询</el-menu-item>
           </el-menu>
         </el-aside>
@@ -116,7 +116,7 @@
             </div>
 
             <div v-else-if="selectedFunction === '成绩查询'">
-              <StudentQueryScore :myCourses="myCourses"></StudentQueryScore>
+              <StudentQueryScore :myCourses="myScores"></StudentQueryScore>
             </div>
 
             <div v-else-if="selectedFunction === '课表查询'">
@@ -151,8 +151,8 @@ export default {
 
   },
 
+  // 在created生命周期钩子中访问路由参数
   created() {
-    // 在created生命周期钩子中访问路由参数
     // console.log("this.$route",this.$route);
     this.userId = this.$route.params.userId;
     this.userName = this.$route.params.userName;
@@ -218,8 +218,15 @@ export default {
         capacity: 0,
         selected_number: 0,
         time: "time",
-        score: 0
       }],
+
+      // 学生成绩信息
+      myScores: [{
+        course_id: "",
+        course_name: "",
+        teacher_name: "",
+        score: 0
+      }]
     };
   },
 
@@ -399,13 +406,39 @@ export default {
           ElMessage.success("退课成功");
           this.deletedCourses = []; // 清空已选课程
           this.fetchCourses(); // 重新查询课表
-        } 
+        }
         else {
           ElMessage.error("退课失败：" + response.data.msg);
         }
       } catch (error) {
         console.error("退课操作失败", error);
         ElMessage.error("退课操作失败");
+      }
+    },
+
+    // 成绩查询功能
+    async fetchScores() {
+      // 构造请求体
+      const apiUrl = `${this.host}/api/students/${this.userId}/courses/score`;
+      try {
+        // 发送 GET 请求
+        const response = await axios.get(apiUrl);
+
+        console.log("return from fetchScores, response: ", response);
+        if (response.data.code == 200) {
+          ElMessage.success("成绩信息查询成功");
+        }
+        else {
+          ElMessage.error("成绩信息查询失败");
+          return;
+        }
+        const scoreData = response.data;
+        this.myScores = scoreData.data.map(score => JSON.parse(score));
+        console.log("this.myScores", this.myScores);
+
+      } catch (error) {
+        console.error("成绩信息查询失败", error);
+        ElMessage.error("成绩信息查询失败");
       }
     },
 
