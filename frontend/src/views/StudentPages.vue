@@ -99,7 +99,7 @@
 
             <div v-else-if="selectedFunction === '退课'">
               <div>
-                <el-table :data="myCourses" style="width: 100%">
+                <el-table :data="myCourses" style="width: 100%" @selection-change="handleSelectionChange_delete">
                   <el-table-column type="selection"></el-table-column>
                   <el-table-column prop="course_id" label="课程号"></el-table-column>
                   <el-table-column prop="course_name" label="课程名"></el-table-column>
@@ -115,7 +115,7 @@
               </div>
             </div>
 
-            <div v-else-if="selectedFunction === '成绩查询'">+
+            <div v-else-if="selectedFunction === '成绩查询'">
               <StudentQueryScore :myCourses="myCourses"></StudentQueryScore>
             </div>
 
@@ -247,7 +247,7 @@ export default {
         teacher_name: teacher_name,
         course_time: course_time
       };
-      axios.get(apiUrl, { params: queryParams })
+      await axios.get(apiUrl, { params: queryParams })
         .then(response => {
 
           // 将查询选课的结果显示到页面上
@@ -315,6 +315,12 @@ export default {
       this.selectedCourses = selectedRows;
     },
 
+    // 更新退课功能中的选中课程到deletedCourses
+    handleSelectionChange_delete(selectedRows) {
+      console.log("选中的课程 selectedRows:", selectedRows);
+      this.deletedCourses = selectedRows;
+    },
+
     // 选课功能
     async selectCourses() {
       try {
@@ -366,6 +372,9 @@ export default {
       // 发送请求进行退课操作
       try {
         const requestBody = [];
+
+        console.log("deletedCourses", this.deletedCourses);
+
         this.deletedCourses.forEach((course) => {
           requestBody.push({
             course_id: course.course_id,
@@ -378,18 +387,21 @@ export default {
           });
         });
 
-        const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
-        const response = await axios.delete(apiUrl, requestBody);
+        console.log("退课请求发送的 requestBody", requestBody);
 
-        const result = JSON.parse(response.data);
-        if (result.success) {
+        const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
+        const response = await axios.delete(apiUrl, { data: requestBody });
+
+        console.log("response return from dropCourses()", response);
+
+        if (response.data.code == 200) {
 
           ElMessage.success("退课成功");
-
           this.deletedCourses = []; // 清空已选课程
-          this.queryCourses(); // 重新查询课表
-        } else {
-          ElMessage.error("退课失败：" + result.message);
+          this.fetchCourses(); // 重新查询课表
+        } 
+        else {
+          ElMessage.error("退课失败：" + response.data.msg);
         }
       } catch (error) {
         console.error("退课操作失败", error);
