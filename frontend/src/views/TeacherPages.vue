@@ -60,7 +60,7 @@
               <label for="course-select">选择课程班级：</label>
               <el-select v-model="selectedCourse" class="m-2" placeholder="">
                 <el-option v-for="course in myCourses" :key="course.course_id" :label="course - select"
-                  :value="course.course_name" />
+                  :value="course.course_id" />
               </el-select>
 
               <!--对选中的selectedCourse进行查询，返回数据给tableData-->
@@ -131,12 +131,14 @@ export default {
     this.userName = this.$route.params.userName;
     console.log("userId", this.userId);
     console.log("userName", this.userName);
+
+    this.fetchCourses();
   },
 
   // data()函数部分
   data() {
     return {
-      host: "https://127.0.0.1:9000",
+      host: "http://127.0.0.1:9000",
       selectedFunction: "开课详情", // 默认选中的功能
 
       selectedCourse: "", // 默认选中的课程
@@ -250,9 +252,9 @@ export default {
     // 查询该教师已经开设的课程
     async fetchCourses() {
 
-      // 构造请求体
-      const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
-
+      // 构造请求体 /api/teachers/{userId}/courses
+      const apiUrl = `${this.host}/api/teachers/${this.userId}/courses`;
+      console.log("apiUrl", apiUrl);
       try {
         // 发送 GET 请求
         const response = await axios.get(apiUrl);
@@ -321,10 +323,6 @@ export default {
         ElMessage.error("成绩上传失败");
       }
     },
-
-    mounted() {
-      this.fetchCourses();
-    }
   },
 };
 </script>
