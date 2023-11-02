@@ -304,7 +304,7 @@ export default {
         // 发送 GET 请求
         const response = await axios.get(apiUrl);
 
-        console.log("return from fetchCourses, response: ", response.data);
+        console.log("return from fetchCourses, response: ", response);
 
         const courseData = response.data;
         this.myCourses = courseData.data.map(course => JSON.parse(course));

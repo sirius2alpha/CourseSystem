@@ -42,7 +42,7 @@
         <div class="main-content-right">
 
           <div v-if="selectedFunction === '开课详情'">
-            <el-table :data="courseInfo" style="width: 100%">
+            <el-table :data="myCourses" style="width: 100%">
               <el-table-column prop="course_id" label="课程号" />
               <el-table-column prop="course_name" label="课程名" />
               <el-table-column prop="teacher_id" label="教师号" />
@@ -59,7 +59,7 @@
             <div style="margin: 20px;">
               <label for="course-select">选择课程班级：</label>
               <el-select v-model="selectedCourse" class="m-2" placeholder="">
-                <el-option v-for="course in courseInfo" :key="course.course_id" :label="course - select"
+                <el-option v-for="course in myCourses" :key="course.course_id" :label="course - select"
                   :value="course.course_name" />
               </el-select>
 
@@ -141,17 +141,6 @@ export default {
 
       selectedCourse: "", // 默认选中的课程
 
-      // 开课详情功能中的课程信息
-      courseInfo: [{
-        course_id: "course_id",
-        course_name: "course_name",
-        teacher_id: "teacher_id",
-        teacher_name: "teacher_name",
-        capacity: 0,
-        selected_number: 0,
-        time: "time"
-      }],
-
       // 已经选的课程
       myCourses: [{
         course_id: "course_id",
@@ -164,6 +153,39 @@ export default {
         score: 0
       }],
 
+      // [测试]已经选的课程
+      myCourses2: [{
+        course_id: "1",
+        course_name: "a",
+        teacher_id: "teacher_id",
+        teacher_name: "teacher_name",
+        capacity: 0,
+        selected_number: 0,
+        time: "time",
+        score: 0
+      },
+      {
+        course_id: "2",
+        course_name: "b",
+        teacher_id: "teacher_id",
+        teacher_name: "teacher_name",
+        capacity: 0,
+        selected_number: 0,
+        time: "time",
+        score: 0
+      },
+      {
+        course_id: "3",
+        course_name: "c",
+        teacher_id: "teacher_id",
+        teacher_name: "teacher_name",
+        capacity: 0,
+        selected_number: 0,
+        time: "time",
+        score: 0
+      }
+    ],
+
       // 上传成绩表格需要的信息
       tableData: [{
         // 这两个信息帮助筛选班级
@@ -174,7 +196,40 @@ export default {
         student_name: "袁浩",
         daily_score: 0,
         examination_score: 0
-      }]
+      }],
+
+      // [测试]上传成绩表格需要的信息
+      tableData2: [
+        {
+        // 这两个信息帮助筛选班级
+        course_id: "a",
+        teacher_id: "teacher_id",
+
+        student_id: "1",
+        student_name: "sda",
+        daily_score: 0,
+        examination_score: 0
+      },
+      {
+        // 这两个信息帮助筛选班级
+        course_id: "a",
+        teacher_id: "teacher_id",
+
+        student_id: "2",
+        student_name: "dfgg",
+        daily_score: 0,
+        examination_score: 0
+      },{
+        // 这两个信息帮助筛选班级
+        course_id: "a",
+        teacher_id: "teacher_id",
+
+        student_id: "3",
+        student_name: "hj",
+        daily_score: 0,
+        examination_score: 0
+      },
+    ]
     };
   },
 
@@ -196,7 +251,7 @@ export default {
     async fetchCourses() {
 
       // 构造请求体
-      const apiUrl = `${this.host}/api/teachers/${this.userId}/courses`;
+      const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
 
       try {
         // 发送 GET 请求
@@ -209,7 +264,6 @@ export default {
         console.log("this.myCourses", this.myCourses);
 
       } catch (error) {
-        
         console.error("课表信息查询失败", error);
         ElMessage.error("课表信息查询失败");
       }
@@ -255,11 +309,10 @@ export default {
 
         // 返回状态码为200，表示上传成功
         if (response.data.code === 200) {
-          console.log("成绩上传成功", response.data);
+          console.log("return from fetchCourses, response:", response);
           ElMessage.success("成绩上传成功");
         }
         else {
-          console.error("成绩上传失败", response.data);
           ElMessage.error("成绩上传失败");
         }
       }
