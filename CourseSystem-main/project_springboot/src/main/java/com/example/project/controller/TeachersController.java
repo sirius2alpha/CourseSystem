@@ -3,19 +3,21 @@ package com.example.project.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.project.common.Result;
-import com.example.project.entity.CoursePlan;
-import com.example.project.entity.CurrentCourses;
-import com.example.project.entity.SelectedCourses;
-import com.example.project.entity.Teachers;
+import com.example.project.entity.*;
 import com.example.project.service.CoursePlanService;
 import com.example.project.service.CurrentCoursesService;
 import com.example.project.service.SelectedCoursesService;
 import com.example.project.service.TeachersService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -70,6 +72,43 @@ public class TeachersController {
         currentCourses.setCapacity(100);
 
         return Result.suc(currentCourses);
+    }
+
+    @GetMapping("/{userId}/courses")
+    public Result kaike(@PathVariable("userId") Integer teacherId) throws JsonProcessingException {
+        List<CurrentCourses> selectno=currentCoursesService.lambdaQuery()
+                .eq(CurrentCourses::getTeacherId,teacherId).list();
+        if(selectno.size()==0)
+            return Result.fail();
+        List<String> response = new ArrayList<>();
+        Integer no;
+        int courseid,teacherid;
+
+        Courses courses=new Courses();
+
+        for (int i = 0; i < selectno.size(); i++) {
+            no = selectno.get(i).getNo();
+            courseid = selectno.get(i).getCourseId();
+            courses.setCourse_id(courseid);
+            List<CoursePlan> coursesname = coursePlanService.lambdaQuery()
+                    .eq(CoursePlan::getCourseId, courseid).list();
+            courses.setCourse_name(coursesname.get(0).getCourseName());
+            teacherid = selectno.get(i).getTeacherId();
+            courses.setTeacher_id(teacherid);
+            List<Teachers> teachersname = teachersService.lambdaQuery()
+                    .eq(Teachers::getId, teacherid).list();
+            courses.setTeacher_name(teachersname.get(0).getName());
+            courses.setCapacity(50);
+            List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
+                    .eq(SelectedCourses::getCurrentCourseId, no).list();
+            courses.setSelected_number(selectno1.size());
+            courses.setTime(selectno.get(i).getTime());
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(courses);
+            response.add(i,json);
+        }
+
+        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
     }
 
 }
