@@ -34,8 +34,8 @@ public class CodeGenerator {
 
         GlobalConfig globalConfig = new GlobalConfig();
 //        String projectPath = System.getProperty("user.dir") + "/project";
-        String projectPath = System.getProperty("user.dir") + "";
-        globalConfig.setOutputDir("E:/IdeaProjects/workspace/CourseSystem-main/project_springboot/src/main/java");
+        String projectPath = System.getProperty("user.dir") + "/CourseSystem-main/project_springboot";
+        globalConfig.setOutputDir(projectPath + "/src/main/java");
         globalConfig.setAuthor("ge");
         globalConfig.setOpen(false);
         globalConfig.setSwagger2(true);
@@ -46,7 +46,7 @@ public class CodeGenerator {
 
 
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/course-system?allowPublicKeyRetrieval=true&useSSL=false");
+        dsc.setUrl("jdbc:mysql://localhost:3306/course_system?allowPublicKeyRetrieval=true&useSSL=false");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("Xie20021008");

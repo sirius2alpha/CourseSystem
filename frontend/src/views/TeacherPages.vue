@@ -209,7 +209,7 @@ export default {
         console.log("this.myCourses", this.myCourses);
 
       } catch (error) {
-        z
+        
         console.error("课表信息查询失败", error);
         ElMessage.error("课表信息查询失败");
       }

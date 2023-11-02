@@ -33,4 +33,6 @@ public class User implements Serializable {
     @ApiModelProperty
     private Integer roleId;
 
+//    public Object getNo() {
+//    }
 }

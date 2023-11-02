@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.project.entity.SelectedCourses">
         <id column="student_id" property="studentId" />
-        <id column="curren_course_id" property="currentCourseId"/>
+        <id column="current_course_id" property="currentCourseId"/>
         <result column="pscj" property="pscj" />
         <result column="kscj" property="kscj" />
         <result column="score" property="score" />
@@ -20,4 +20,3 @@
     </select>
 
 </mapper>
-

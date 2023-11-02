@@ -10,8 +10,12 @@ public class Result {
     private int total;//总记录数
     private Object data;//数据
 
+    public static Result fail(String msg){
+        return result(401,msg,0,null);
+    }
+
     public static Result fail(){
-        return result(401,"失败",0,null);
+        return result(401,"error",0,null);
     }
 
     public static Result suc(){

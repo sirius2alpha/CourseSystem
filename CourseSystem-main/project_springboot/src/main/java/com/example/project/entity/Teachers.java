@@ -1,9 +1,6 @@
 package com.example.project.entity;
 
 import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +12,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author ge
- * @since 2023-10-21
+ * @since 2023-10-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -23,12 +20,11 @@ import lombok.EqualsAndHashCode;
 public class Teachers implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty
-    @TableId(value = "id", type = IdType.AUTO)
+
     private Integer id;
-    @ApiModelProperty
+
     private String name;
-    @ApiModelProperty
+
     private Integer yxh;
 
 

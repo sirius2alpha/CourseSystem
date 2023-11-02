@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -29,6 +30,7 @@ import java.util.List;
  * @since 2023-10-17
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
@@ -44,6 +46,12 @@ public class UserController {
     public List<User> list(){
         return userService.list();
     }
+
+//    @GetMapping("/findByNo")
+//    public Result findByNo(@RequestParam String no){
+//        List list = userService.lambdaQuery().eq(User::getNo,no).list();
+//        return list.size()>0?Result.suc(list):Result.fail();
+//    }
 
     //add
     @PostMapping("/save")
@@ -67,6 +75,7 @@ public class UserController {
     }
     //query
 
+    //login
     @PostMapping("/{id}/pwd")
     public Result msg(@RequestBody User user){
         List<User> list = userService.lambdaQuery()
@@ -149,7 +158,7 @@ public class UserController {
 
     @PostMapping("/listPageC1")
     public Result listPageC1(@RequestBody QueryPageParam query){
-        HashMap param = query.getParam();
+        Map param = query.getParam();
         String name=(String)param.get("name");
 
         Page<User> page = new Page<>();
