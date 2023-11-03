@@ -135,7 +135,7 @@ public class TeachersController {
         Score.setExamination_score(0);
         List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
                 .eq(SelectedCourses::getCurrentCourseId, no).list();
-        for (int i = 0; i < selectno.size(); i++) {
+        for (int i = 0; i < selectno1.size(); i++) {
             studentid = selectno1.get(i).getStudentId();
             List<Students> stuname = studentsService.lambdaQuery()
                     .eq(Students::getId, studentid).list();
