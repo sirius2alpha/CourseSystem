@@ -8,10 +8,7 @@ import com.example.project.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +123,42 @@ public class TeachersController {
         Integer no=selectno.get(0).getNo();
         int studentid;
 
-        Student student=new Student();
+        score Score=new score();
+        Score.setTeacher_id(teacherId);
+        Score.setCourse_id(courseId);
+        Score.setDaily_score(0);
+        Score.setExamination_score(0);
+        List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
+                .eq(SelectedCourses::getCurrentCourseId, no).list();
+        for(int i=0;i<selectno.size();i++)
+        {
+            studentid=selectno1.get(i).getStudentId();
+            List<Students> stuname=studentsService.lambdaQuery()
+                    .eq(Students::getId,studentid).list();
+            Score.setStudent_id(studentid);
+            Score.setStudent_name(stuname.get(0).getName());
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(Score);
+            response.add(i,json);
+        }
+
+        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+    }
+
+    /*
+    @PostMapping("/{userId}/courses/{selectedCourse}")
+    public Result updatescore(@RequestBody List<score> Score,
+                              @PathVariable("userId") Integer teacherId,
+                              @PathVariable("selectedCourse") Integer courseId) throws JsonProcessingException {
+        List<CurrentCourses> selectno=currentCoursesService.lambdaQuery()
+                .eq(CurrentCourses::getTeacherId,teacherId)
+                .eq(CurrentCourses::getCourseId,courseId).list();
+        if(selectno.size()==0)
+            return Result.fail("没有学生选这个课");
+        List<String> response = new ArrayList<>();
+        Integer no=selectno.get(0).getNo();
+        int studentid;
+
 
         List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
                 .eq(SelectedCourses::getCurrentCourseId, no).list();
@@ -144,4 +176,7 @@ public class TeachersController {
 
         return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
     }
+
+     */
+
 }
