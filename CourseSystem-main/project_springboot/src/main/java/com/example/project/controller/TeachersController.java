@@ -1,15 +1,17 @@
 package com.example.project.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.project.common.Result;
 import com.example.project.entity.*;
+import com.example.project.mapper.SelectedCoursesMapper;
 import com.example.project.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,11 @@ public class TeachersController {
     private TeachersService teachersService;
     @Autowired
     private StudentsService studentsService;
+
+    @Resource
+    private SelectedCoursesMapper selectedCoursesMapper;
+
+
 
 
     /**
@@ -72,19 +79,17 @@ public class TeachersController {
         return Result.suc(currentCourses);
     }
     */
-
-
     @GetMapping("/{userId}/courses")
     public Result kaike(@PathVariable("userId") Integer teacherId) throws JsonProcessingException {
-        List<CurrentCourses> selectno=currentCoursesService.lambdaQuery()
-                .eq(CurrentCourses::getTeacherId,teacherId).list();
-        if(selectno.size()==0)
+        List<CurrentCourses> selectno = currentCoursesService.lambdaQuery()
+                .eq(CurrentCourses::getTeacherId, teacherId).list();
+        if (selectno.size() == 0)
             return Result.fail();
         List<String> response = new ArrayList<>();
         Integer no;
-        int courseid,teacherid;
+        int courseid, teacherid;
 
-        Courses courses=new Courses();
+        Courses courses = new Courses();
 
         for (int i = 0; i < selectno.size(); i++) {
             no = selectno.get(i).getNo();
@@ -105,78 +110,66 @@ public class TeachersController {
             courses.setTime(selectno.get(i).getTime());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courses);
-            response.add(i,json);
+            response.add(i, json);
         }
 
-        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+        return selectno.size() > 0 ? Result.suc(response, selectno.size()) : Result.fail();
     }
 
     @GetMapping("/{userId}/courses/{selectedCourse}")
     public Result xueshengmingdan(@PathVariable("userId") Integer teacherId,
                                   @PathVariable("selectedCourse") Integer courseId) throws JsonProcessingException {
-        List<CurrentCourses> selectno=currentCoursesService.lambdaQuery()
-                .eq(CurrentCourses::getTeacherId,teacherId)
-                .eq(CurrentCourses::getCourseId,courseId).list();
-        if(selectno.size()==0)
+        List<CurrentCourses> selectno = currentCoursesService.lambdaQuery()
+                .eq(CurrentCourses::getTeacherId, teacherId)
+                .eq(CurrentCourses::getCourseId, courseId).list();
+        if (selectno.size() == 0)
             return Result.fail("没有学生选这个课");
         List<String> response = new ArrayList<>();
-        Integer no=selectno.get(0).getNo();
+        Integer no = selectno.get(0).getNo();
         int studentid;
 
-        score Score=new score();
+        score Score = new score();
         Score.setTeacher_id(teacherId);
         Score.setCourse_id(courseId);
         Score.setDaily_score(0);
         Score.setExamination_score(0);
         List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
                 .eq(SelectedCourses::getCurrentCourseId, no).list();
-        for(int i=0;i<selectno.size();i++)
-        {
-            studentid=selectno1.get(i).getStudentId();
-            List<Students> stuname=studentsService.lambdaQuery()
-                    .eq(Students::getId,studentid).list();
+        for (int i = 0; i < selectno.size(); i++) {
+            studentid = selectno1.get(i).getStudentId();
+            List<Students> stuname = studentsService.lambdaQuery()
+                    .eq(Students::getId, studentid).list();
             Score.setStudent_id(studentid);
             Score.setStudent_name(stuname.get(0).getName());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(Score);
-            response.add(i,json);
+            response.add(i, json);
         }
 
-        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+        return selectno.size() > 0 ? Result.suc(response, selectno.size()) : Result.fail();
     }
 
-    /*
+
     @PostMapping("/{userId}/courses/{selectedCourse}")
     public Result updatescore(@RequestBody List<score> Score,
                               @PathVariable("userId") Integer teacherId,
                               @PathVariable("selectedCourse") Integer courseId) throws JsonProcessingException {
-        List<CurrentCourses> selectno=currentCoursesService.lambdaQuery()
-                .eq(CurrentCourses::getTeacherId,teacherId)
-                .eq(CurrentCourses::getCourseId,courseId).list();
-        if(selectno.size()==0)
-            return Result.fail("没有学生选这个课");
-        List<String> response = new ArrayList<>();
-        Integer no=selectno.get(0).getNo();
-        int studentid;
-
-
-        List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
-                .eq(SelectedCourses::getCurrentCourseId, no).list();
-        for(int i=0;i<selectno.size();i++)
-        {
-            studentid=selectno1.get(i).getStudentId();
-            List<Students> stuname=studentsService.lambdaQuery()
-                    .eq(Students::getId,studentid).list();
-            student.setId(studentid);
-            student.setName(stuname.get(0).getName());
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(student);
-            response.add(i,json);
+        List<CurrentCourses> selectcourse = currentCoursesService.lambdaQuery()
+                .eq(CurrentCourses::getCourseId, courseId)
+                .eq(CurrentCourses::getTeacherId, teacherId).list();
+            double pscj,kscj,score;
+        for (int j = 0; j < Score.size(); j++) {
+            pscj=Score.get(j).getDaily_score();
+            kscj=Score.get(j).getExamination_score();
+            score=pscj*0.3+kscj*0.7;
+            LambdaUpdateWrapper<SelectedCourses> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(SelectedCourses::getStudentId, Score.get(j).getStudent_id())
+                    .eq(SelectedCourses::getCurrentCourseId,selectcourse.get(0).getNo())
+                    .set(SelectedCourses::getPscj,pscj)
+                    .set(SelectedCourses::getKscj, kscj)
+                    .set(SelectedCourses::getScore, score);
+            selectedCoursesMapper.update(null, lambdaUpdateWrapper);
         }
-
-        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+        return Result.suc();
     }
-
-     */
-
 }
