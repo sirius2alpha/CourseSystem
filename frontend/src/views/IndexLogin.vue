@@ -45,7 +45,6 @@
 
               <div>
                 <el-button type="primary" round @click="login">登录</el-button>
-                <el-button type="primary" round @click="jumpTeachers">老师页面</el-button>
               </div>
 
             </div>
@@ -120,10 +119,6 @@ export default {
         ElMessage.error("登录失败");
 
       }
-    },
-
-    jumpTeachers() {
-      this.$router.push({ name: 'teachers', params: { userId: this.userId, userName: this.userName } });
     }
   },
 

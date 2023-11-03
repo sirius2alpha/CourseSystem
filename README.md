@@ -8,7 +8,7 @@
 
 ### 系统架构
 
-![系统架构图](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1698984336.png)
+![系统架构图](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008162.png)
 
 整个教务系统的设计采用了一系列成熟的技术，以确保系统的可靠性和可维护性。以下是对系统设计的进一步扩展：
 
@@ -199,7 +199,9 @@ CREATE TABLE `selected_courses` (
   `current_course_id` int NOT NULL,
   `pscj` double DEFAULT NULL,
   `kscj` double DEFAULT NULL,
-  `score` double DEFAULT NULL,
+  `score` double DEFAULT NULL,￼
+
+退课功能
   PRIMARY KEY (`student_id`,`current_course_id`) USING BTREE,
   KEY `student_id` (`student_id`) USING BTREE,
   KEY `current_course_id` (`current_course_id`) USING BTREE,
@@ -281,7 +283,7 @@ CREATE TABLE `user` (
 ### 表检查约束设计
 
 1. **colleges（学院表）**:
-   - 该表有一个主键约束，保证每个学院都有唯一的ID。
+   - 该表有一个主键约束，保证每个学院都有唯一的ID。![image-20231103192009064](/home/yoho/.config/Typora/typora-user-images/image-20231103192009064.png)
    - 无其他检查约束。
 
 2. **course_plan（课程计划表）**:
@@ -314,7 +316,7 @@ CREATE TABLE `user` (
 
 
 
-### 前端页面设计（可贴代码+解释，展示关键部分就行，不用很详细）
+### 前端页面设计
 
 ```
 src
@@ -340,6 +342,94 @@ src
 - `views`：这个目录用于存放页面级的 Vue 组件。在这个项目中，有 `IndexLogin.vue`（登录页面）、`StudentPages.vue`（学生页面）、`StudentQueryScore.vue`（学生查询成绩页面）和 `TeacherPages.vue`（教师页面）。
 
 
+
+#### 登录页面
+
+登录页面输入学生或者老师的账号就能实现登录，并能够根据自动跳转到学生界面或者老师的界面。
+
+![登录页面](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008642.png)
+
+#### 学生界面
+
+学生界面有四个功能：选课、退课、成绩查询、课表查询
+
+**选课功能**
+
+选课功能如下，对课程号、课程名、教师号、教师姓名、上课时间进行检索，之后会返回相应开课信息。
+
+![学生选课-1](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699009956.png)
+
+**退课功能**
+
+通过多选框勾选要退选的课程，点击退课按钮，就会向后端发送退课的请求，之后再重新查询已选课程信息，响应式更新页面内容。
+
+![学生-退课](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699010298.png)
+
+**成绩查询**
+
+点击边栏的成绩查询功能，会触发绑定的函数fetchScores()，在选课表中的该学生进行查询，查询他的所有课程和成绩。分数那一栏没有成绩说明老师还没有进行成绩录入。
+
+![学生-成绩查询](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699010525.png)
+
+**课表查询**
+
+对退课处更新后的课表，课表的数据在这个板块继续使用。根据课程的时间在课程表中进行填入。
+
+功能实现的javascript代码如下：
+
+```js
+ this.myCourses.forEach((course) => {
+      // 将课程的时间转换为字符数组
+      const times = course.time.split('');
+      console.log("拆分的时间", times);
+
+      // 提取第一个字符作为周几，并映射到英文
+      const day = dayMapping[times[0]];
+      console.log("周", day);
+
+      // 提取第2和4个数字作为上课的时间
+      // 注意9-10,11-12的情况
+      let startTime = "";
+      let endTime = "";
+      if (times[1] === "9") {
+        startTime = timeMapping[9];
+        endTime = timeMapping[10];
+      }
+      else if (times[2] != "-") {
+        startTime = timeMapping[11];
+        endTime = timeMapping[12];
+      }
+      else {
+        startTime = timeMapping[times[1]];
+        endTime = timeMapping[times[3]];
+      }
+      console.log("上课时间", startTime, endTime);
+
+      // 根据开始和结束时间找到对应的表格行的索引
+      const startIndex = this.tableData.findIndex((row) => row.time === startTime);
+      const endIndex = this.tableData.findIndex((row) => row.time === endTime);
+      console.log("开始和结束的索引", startIndex, endIndex);
+
+      if (startIndex !== -1 && endIndex !== -1) {
+        // 根据课程的日期更新表格行的对应列
+        for (let i = startIndex; i <= endIndex; i++) {
+          this.tableData[i][day] = course.course_name;
+        }
+      }
+    });
+```
+
+![image-20231103193058119](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699011058.png)
+
+#### 教师界面
+
+教师界面左上角是老师的姓名和工号，有一个标签为“老师”。教师界面主要设置了两个功能：
+
+功能1是查看这个教师的开课详情，已选人数等信息。
+
+功能2是对班级内的学生进行成绩的登入。
+
+![image-20231103185104378](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008664.png)
 
 ### 后端服务设计（可贴代码+解释，展示关键部分就行，不用很详细）
 
