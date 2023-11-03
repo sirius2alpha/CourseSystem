@@ -259,6 +259,15 @@ public class SelectcourseController {
             i = Integer.valueOf(userid);
         }
         for(int j=0;j<courses.size();j++) {
+            List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
+                    .eq(SelectedCourses::getStudentId,userid).list();
+            for(int k=0;k<selectno.size();k++)
+            {
+                List<CurrentCourses> curtime=currentCoursesService.lambdaQuery()
+                        .eq(CurrentCourses::getNo,selectno.get(k).getCurrentCourseId()).list();
+                if(Objects.equals(curtime.get(0).getTime(), courses.get(j).getTime()))
+                    return Result.fail("选课时间冲突");
+            }
             List<CurrentCourses> selectcourse = currentCoursesService.lambdaQuery()
                     .eq(CurrentCourses::getTime, courses.get(j).getTime())
                     .eq(CurrentCourses::getCourseId, courses.get(j).getCourse_id())
@@ -266,6 +275,10 @@ public class SelectcourseController {
             List<SelectedCourses> selectedCourse = selectedCoursesService.lambdaQuery()
                     .eq(SelectedCourses::getStudentId, userid)
                     .eq(SelectedCourses::getCurrentCourseId, selectcourse.get(0).getNo()).list();
+            List<SelectedCourses> num = selectedCoursesService.lambdaQuery()
+                    .eq(SelectedCourses::getCurrentCourseId, selectcourse.get(0).getNo()).list();
+            if(num.size()==50)
+                return Result.fail("课程容量已满");
             SelectedCourses selectedCourses = new SelectedCourses();
             if (selectedCourse.size() > 0)
                 return Result.fail();
@@ -281,6 +294,7 @@ public class SelectcourseController {
                 else
                     return Result.fail();
             }
+
         }
         return Result.suc();
     }
