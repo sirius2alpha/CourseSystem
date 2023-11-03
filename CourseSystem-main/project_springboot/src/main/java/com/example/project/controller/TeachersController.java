@@ -4,10 +4,7 @@ package com.example.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.project.common.Result;
 import com.example.project.entity.*;
-import com.example.project.service.CoursePlanService;
-import com.example.project.service.CurrentCoursesService;
-import com.example.project.service.SelectedCoursesService;
-import com.example.project.service.TeachersService;
+import com.example.project.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +35,14 @@ public class TeachersController {
     private CoursePlanService coursePlanService;
     @Autowired
     private TeachersService teachersService;
+    @Autowired
+    private StudentsService studentsService;
+
 
     /**
      * 课程详情
      */
+   /*
     @GetMapping("/{userId}/courses/{courseId}")
     public Result courses(@PathVariable("userId") Integer teacherId, @PathVariable("courseId") Integer courseId) {
         LambdaQueryWrapper<CurrentCourses> currentCoursesQueryWrapper = new LambdaQueryWrapper<>();
@@ -73,6 +74,8 @@ public class TeachersController {
 
         return Result.suc(currentCourses);
     }
+    */
+
 
     @GetMapping("/{userId}/courses")
     public Result kaike(@PathVariable("userId") Integer teacherId) throws JsonProcessingException {
@@ -111,4 +114,34 @@ public class TeachersController {
         return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
     }
 
+    @GetMapping("/{userId}/courses/{selectedCourse}")
+    public Result xueshengmingdan(@PathVariable("userId") Integer teacherId,
+                                  @PathVariable("selectedCourse") Integer courseId) throws JsonProcessingException {
+        List<CurrentCourses> selectno=currentCoursesService.lambdaQuery()
+                .eq(CurrentCourses::getTeacherId,teacherId)
+                .eq(CurrentCourses::getCourseId,courseId).list();
+        if(selectno.size()==0)
+            return Result.fail("没有学生选这个课");
+        List<String> response = new ArrayList<>();
+        Integer no=selectno.get(0).getNo();
+        int studentid;
+
+        Student student=new Student();
+
+        List<SelectedCourses> selectno1 = selectedCoursesService.lambdaQuery()
+                .eq(SelectedCourses::getCurrentCourseId, no).list();
+        for(int i=0;i<selectno.size();i++)
+        {
+            studentid=selectno1.get(i).getStudentId();
+            List<Students> stuname=studentsService.lambdaQuery()
+                    .eq(Students::getId,studentid).list();
+            student.setId(studentid);
+            student.setName(stuname.get(0).getName());
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(student);
+            response.add(i,json);
+        }
+
+        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+    }
 }

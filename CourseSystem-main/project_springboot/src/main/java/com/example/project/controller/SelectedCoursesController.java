@@ -15,10 +15,7 @@ import com.example.project.service.SelCoursesService;
 import com.example.project.service.SelectedCoursesService;
 import com.example.project.service.StudentsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -77,6 +74,8 @@ public class SelectedCoursesController {
             course.setStudentName(stu.getName());
         }
     }
+
+
 }
 
 
