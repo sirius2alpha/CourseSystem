@@ -186,7 +186,7 @@ export default {
         time: "time",
         score: 0
       }
-    ],
+      ],
 
       // 上传成绩表格需要的信息
       tableData: [{
@@ -203,35 +203,43 @@ export default {
       // [测试]上传成绩表格需要的信息
       tableData2: [
         {
-        // 这两个信息帮助筛选班级
-        course_id: "a",
-        teacher_id: "teacher_id",
+          // 这两个信息帮助筛选班级
+          course_id: "a",
+          teacher_id: "teacher_id",
 
-        student_id: "1",
-        student_name: "sda",
-        daily_score: 0,
-        examination_score: 0
-      },
-      {
-        // 这两个信息帮助筛选班级
-        course_id: "a",
-        teacher_id: "teacher_id",
+          student_id: "1",
+          student_name: "sda",
+          daily_score: 0,
+          examination_score: 0
+        },
+        {
+          // 这两个信息帮助筛选班级
+          course_id: "a",
+          teacher_id: "teacher_id",
 
-        student_id: "2",
-        student_name: "dfgg",
-        daily_score: 0,
-        examination_score: 0
-      },{
-        // 这两个信息帮助筛选班级
-        course_id: "a",
-        teacher_id: "teacher_id",
+          student_id: "2",
+          student_name: "dfgg",
+          daily_score: 0,
+          examination_score: 0
+        }, {
+          // 这两个信息帮助筛选班级
+          course_id: "a",
+          teacher_id: "teacher_id",
 
-        student_id: "3",
-        student_name: "hj",
-        daily_score: 0,
-        examination_score: 0
-      },
-    ]
+          student_id: "3",
+          student_name: "hj",
+          daily_score: 0,
+          examination_score: 0
+        },
+      ],
+
+      SubmitData: [
+        {
+          student_id: "",
+          daily_score: 0,
+          examination_score: 0
+        },
+      ]
     };
   },
 
@@ -288,8 +296,10 @@ export default {
         console.log("return from fetchStudents, response: ", response);
 
         // 用JSON.parse()方法将字符串转换为JSON对象
-        const courseData = JSON.parse(response.data.data);
-        this.tableData = courseData;
+        const courseData = response.data;
+        this.tableData = courseData.data.map(course => JSON.parse(course));
+
+        console.log("this.tableData", this.tableData);
       }
       catch (error) {
         console.error("该班级下学生信息查询失败", error);
@@ -305,9 +315,18 @@ export default {
       console.log("this.tableData", this.tableData);
 
       try {
+        // 将tableData中的数据转换为SubmitData中的数据
+        this.SubmitData = this.tableData.map(student => {
+          return {
+            student_id: student.student_id,
+            daily_score: student.daily_score,
+            examination_score: student.examination_score
+          }
+        });
+        console.log("this.SubmitData", this.SubmitData);
 
         // 发送 POST 请求
-        const response = await axios.post(apiUrl, this.tableData);
+        const response = await axios.post(apiUrl, this.SubmitData);
 
         // 返回状态码为200，表示上传成功
         if (response.data.code === 200) {
