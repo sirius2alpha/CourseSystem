@@ -141,97 +141,31 @@ export default {
       host: "http://127.0.0.1:9000",
       selectedFunction: "开课详情", // 默认选中的功能
 
-      selectedCourse: "", // 默认选中的课程
+      selectedCourse: "请选择班级", // 默认选中的课程
 
       // 已经选的课程
       myCourses: [{
-        course_id: "course_id",
-        course_name: "course_name",
-        teacher_id: "teacher_id",
-        teacher_name: "teacher_name",
+        course_id: "",
+        course_name: "",
+        teacher_id: "",
+        teacher_name: "",
         capacity: 0,
         selected_number: 0,
         time: "time",
         score: 0
       }],
-
-      // [测试]已经选的课程
-      myCourses2: [{
-        course_id: "1",
-        course_name: "a",
-        teacher_id: "teacher_id",
-        teacher_name: "teacher_name",
-        capacity: 0,
-        selected_number: 0,
-        time: "time",
-        score: 0
-      },
-      {
-        course_id: "2",
-        course_name: "b",
-        teacher_id: "teacher_id",
-        teacher_name: "teacher_name",
-        capacity: 0,
-        selected_number: 0,
-        time: "time",
-        score: 0
-      },
-      {
-        course_id: "3",
-        course_name: "c",
-        teacher_id: "teacher_id",
-        teacher_name: "teacher_name",
-        capacity: 0,
-        selected_number: 0,
-        time: "time",
-        score: 0
-      }
-      ],
 
       // 上传成绩表格需要的信息
       tableData: [{
         // 这两个信息帮助筛选班级
-        course_id: "course_id",
-        teacher_id: "teacher_id",
+        course_id: "",
+        teacher_id: "",
 
-        student_id: "21122453",
-        student_name: "袁浩",
+        student_id: "",
+        student_name: "",
         daily_score: 0,
         examination_score: 0
       }],
-
-      // [测试]上传成绩表格需要的信息
-      tableData2: [
-        {
-          // 这两个信息帮助筛选班级
-          course_id: "a",
-          teacher_id: "teacher_id",
-
-          student_id: "1",
-          student_name: "sda",
-          daily_score: 0,
-          examination_score: 0
-        },
-        {
-          // 这两个信息帮助筛选班级
-          course_id: "a",
-          teacher_id: "teacher_id",
-
-          student_id: "2",
-          student_name: "dfgg",
-          daily_score: 0,
-          examination_score: 0
-        }, {
-          // 这两个信息帮助筛选班级
-          course_id: "a",
-          teacher_id: "teacher_id",
-
-          student_id: "3",
-          student_name: "hj",
-          daily_score: 0,
-          examination_score: 0
-        },
-      ],
 
       SubmitData: [
         {

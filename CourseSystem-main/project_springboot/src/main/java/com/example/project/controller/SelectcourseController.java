@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.example.project.common.JsonResultUtil;
@@ -57,10 +56,10 @@ public class SelectcourseController {
 
     @GetMapping("/courses")
     public Result selclass(@RequestParam(name = "course_id", required = false) Integer course_id,
-                                   @RequestParam(name = "course_name", required = false) String course_name,
-                                   @RequestParam(name = "teacher_id", required = false) Integer teacher_id,
-                                   @RequestParam(name = "teacher_name", required = false) String teacher_name,
-                                   @RequestParam(name = "course_time", required = false) String course_time) throws JsonProcessingException {
+            @RequestParam(name = "course_name", required = false) String course_name,
+            @RequestParam(name = "teacher_id", required = false) Integer teacher_id,
+            @RequestParam(name = "teacher_name", required = false) String teacher_name,
+            @RequestParam(name = "course_time", required = false) String course_time) throws JsonProcessingException {
         // 在这里使用查询参数 course_id, course_name, teacher_id, teacher_name, course_time 来处理请求
         // 你可以根据这些参数来过滤和查询数据
         // 注意：`required = false` 表示这些参数是可选的，如果客户端未提供某个参数，它将为null或空字符串
@@ -72,31 +71,31 @@ public class SelectcourseController {
         String teachername = teacher_name;
         String coursetime = course_time;
 
-
         // new
         /*
-        // 根据传入的参数构建查询条件
-        YourQueryParams queryParams = new YourQueryParams(course_id, course_name, teacher_id, teacher_name, course_time);
-
-        // 调用Service方法查询数据
-        List<YourDataModel> result = yourService.getYourData(queryParams);
-
-        // 构建JSON响应
-        List<Map<String, Object>> response = new ArrayList<>();
-        for (YourDataModel data : result) {
-            Map<String, Object> item = new HashMap<>();
-            item.put("course_id", data.getCourseId());
-            item.put("course_name", data.getCourseName());
-            item.put("teacher_id", data.getTeacherId());
-            item.put("teacher_name", data.getTeacherName());
-            item.put("capacity", data.getCapacity());
-            item.put("selected_number", data.getNumber());
-            item.put("time", data.getTime());
-            response.add(item);
-        }
-
-        return list.size() > 0 ? Result.suc(response) : Result.fail();
-        */
+         * // 根据传入的参数构建查询条件
+         * YourQueryParams queryParams = new YourQueryParams(course_id, course_name,
+         * teacher_id, teacher_name, course_time);
+         * 
+         * // 调用Service方法查询数据
+         * List<YourDataModel> result = yourService.getYourData(queryParams);
+         * 
+         * // 构建JSON响应
+         * List<Map<String, Object>> response = new ArrayList<>();
+         * for (YourDataModel data : result) {
+         * Map<String, Object> item = new HashMap<>();
+         * item.put("course_id", data.getCourseId());
+         * item.put("course_name", data.getCourseName());
+         * item.put("teacher_id", data.getTeacherId());
+         * item.put("teacher_name", data.getTeacherName());
+         * item.put("capacity", data.getCapacity());
+         * item.put("selected_number", data.getNumber());
+         * item.put("time", data.getTime());
+         * response.add(item);
+         * }
+         * 
+         * return list.size() > 0 ? Result.suc(response) : Result.fail();
+         */
         // old
         List<Teachers> teacherslist = teachersService.lambdaQuery()
                 .like(Teachers::getName, teachername).list();
@@ -158,69 +157,69 @@ public class SelectcourseController {
         }
 
         /*
-        // 构建JSON响应
-        List<Map<String, Object>> response = new ArrayList<>();
-        for (YourDataModel data : result) {
-            Map<String, Object> item = new HashMap<>();
-            item.put("course_id", data.getCourseId());
-            item.put("course_name", data.getCourseName());
-            item.put("teacher_id", data.getTeacherId());
-            item.put("teacher_name", data.getTeacherName());
-            item.put("capacity", data.getCapacity());
-            item.put("selected_number", data.getNumber());
-            item.put("time", data.getTime());
-            response.add(item);
-        }
-        */
+         * // 构建JSON响应
+         * List<Map<String, Object>> response = new ArrayList<>();
+         * for (YourDataModel data : result) {
+         * Map<String, Object> item = new HashMap<>();
+         * item.put("course_id", data.getCourseId());
+         * item.put("course_name", data.getCourseName());
+         * item.put("teacher_id", data.getTeacherId());
+         * item.put("teacher_name", data.getTeacherName());
+         * item.put("capacity", data.getCapacity());
+         * item.put("selected_number", data.getNumber());
+         * item.put("time", data.getTime());
+         * response.add(item);
+         * }
+         */
         // 构建JSON响应
         List<String> response = new ArrayList<>();
         Integer no;
 
-        Courses courses=new Courses();
+        Courses courses = new Courses();
 
         for (int i = 0; i < list.size(); i++) {
             courseid = list.get(i).getCourseId();
             courses.setCourse_id(courseid);
-            //res.put("course_id", courseid);
+            // res.put("course_id", courseid);
             List<CoursePlan> coursesname = coursePlanService.lambdaQuery()
                     .eq(CoursePlan::getCourseId, courseid).list();
             courses.setCourse_name(coursesname.get(0).getCourseName());
-            //res.put("course_name", coursesname.get(0).getCourseName());
+            // res.put("course_name", coursesname.get(0).getCourseName());
             teacherid = list.get(i).getTeacherId();
             courses.setTeacher_id(teacherid);
-            //res.put("teacher_id", teacherid);
+            // res.put("teacher_id", teacherid);
             List<Teachers> teachersname = teachersService.lambdaQuery()
                     .eq(Teachers::getId, teacherid).list();
             courses.setTeacher_name(teachersname.get(0).getName());
-            //res.put("teacher_name", teachersname.get(0).getName());
-            //res.put("capacity", 50);
+            // res.put("teacher_name", teachersname.get(0).getName());
+            // res.put("capacity", 50);
             courses.setCapacity(50);
             no = list.get(i).getNo();
             List<SelectedCourses> selectno = selectedCoursesService.lambdaQuery()
                     .eq(SelectedCourses::getCurrentCourseId, no).list();
             courses.setSelected_number(selectno.size());
-            //res.put("selected_number", selectno.size());
+            // res.put("selected_number", selectno.size());
             courses.setTime(list.get(i).getTime());
-            //res.put("course_time", list.get(i).getTime());
+            // res.put("course_time", list.get(i).getTime());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courses);
-            response.add(i,json);
+            response.add(i, json);
         }
 
-        return list.size() > 0 ? Result.suc(response,list.size()) : Result.fail();
+        return list.size() > 0 ? Result.suc(response, list.size()) : Result.fail();
     }
 
     @GetMapping("/students/{userId}/courses")
     public Result selectedclass(@PathVariable("userId") String userId) throws JsonProcessingException {
-        List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
-                .eq(SelectedCourses::getStudentId,userId).list();
-        if(selectno.size()==0)
+        List<SelectedCourses> selectno = selectedCoursesService.lambdaQuery()
+                .eq(SelectedCourses::getStudentId, userId).list();
+        if (selectno.size() == 0)
             return Result.fail();
         List<String> response = new ArrayList<>();
         Integer no;
-        int courseid,teacherid;
+        int courseid, teacherid;
 
-        Courses courses=new Courses();
+        Courses courses = new Courses();
 
         for (int i = 0; i < selectno.size(); i++) {
             no = selectno.get(i).getCurrentCourseId();
@@ -244,28 +243,30 @@ public class SelectcourseController {
             courses.setTime(list.get(0).getTime());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courses);
-            response.add(i,json);
+            response.add(i, json);
         }
 
-        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+        return selectno.size() > 0 ? Result.suc(response, selectno.size()) : Result.fail();
     }
 
     @PostMapping("/students/{userId}/courses")
     public Result selectedclass(@PathVariable("userId") String userid,
-                                @RequestBody List<Courses> courses)
-    {
+            @RequestBody List<Courses> courses) {
         Integer i = null;
-        if(userid!=null){
+        if (userid != null) {
             i = Integer.valueOf(userid);
         }
-        for(int j=0;j<courses.size();j++) {
-            List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
-                    .eq(SelectedCourses::getStudentId,userid).list();
-            for(int k=0;k<selectno.size();k++)
-            {
-                List<CurrentCourses> curtime=currentCoursesService.lambdaQuery()
-                        .eq(CurrentCourses::getNo,selectno.get(k).getCurrentCourseId()).list();
-                if(Objects.equals(curtime.get(0).getTime(), courses.get(j).getTime()))
+        for (int j = 0; j < courses.size(); j++) {
+            List<SelectedCourses> selectno = selectedCoursesService.lambdaQuery()
+                    .eq(SelectedCourses::getStudentId, userid).list();
+            for (int k = 0; k < selectno.size(); k++) {
+                List<CurrentCourses> curtime = currentCoursesService.lambdaQuery()
+                        .eq(CurrentCourses::getNo, selectno.get(k).getCurrentCourseId()).list();
+                // 重复选择同一门课
+                if (Objects.equals(curtime.get(0).getCourseId(), courses.get(j).getCourse_id()))
+                    return Result.fail("已选择该课程");
+                // 选课时间冲突
+                else if (Objects.equals(curtime.get(0).getTime(), courses.get(j).getTime()))
                     return Result.fail("选课时间冲突");
             }
             List<CurrentCourses> selectcourse = currentCoursesService.lambdaQuery()
@@ -277,7 +278,7 @@ public class SelectcourseController {
                     .eq(SelectedCourses::getCurrentCourseId, selectcourse.get(0).getNo()).list();
             List<SelectedCourses> num = selectedCoursesService.lambdaQuery()
                     .eq(SelectedCourses::getCurrentCourseId, selectcourse.get(0).getNo()).list();
-            if(num.size()==50)
+            if (num.size() == 50)
                 return Result.fail("课程容量已满");
             SelectedCourses selectedCourses = new SelectedCourses();
             if (selectedCourse.size() > 0)
@@ -299,16 +300,14 @@ public class SelectcourseController {
         return Result.suc();
     }
 
-
     @DeleteMapping("/students/{userId}/courses")
     public Result delcourse(@RequestBody List<Courses> courses,
-                            @PathVariable("userId") String userid)
-    {
+            @PathVariable("userId") String userid) {
         Integer i = null;
-        if(userid!=null){
+        if (userid != null) {
             i = Integer.valueOf(userid);
         }
-        for(int j=0;j<courses.size();j++) {
+        for (int j = 0; j < courses.size(); j++) {
             List<CurrentCourses> selectcourse = currentCoursesService.lambdaQuery()
                     .eq(CurrentCourses::getTime, courses.get(j).getTime())
                     .eq(CurrentCourses::getCourseId, courses.get(j).getCourse_id())
@@ -319,9 +318,9 @@ public class SelectcourseController {
             if (selectedCourse.size() == 0)
                 return Result.fail();
             else {
-                Map<String,Object> selmap=new HashMap<>();
-                selmap.put("student_id",i);
-                selmap.put("current_course_id",selectcourse.get(0).getNo());
+                Map<String, Object> selmap = new HashMap<>();
+                selmap.put("student_id", i);
+                selmap.put("current_course_id", selectcourse.get(0).getNo());
                 boolean savecourse = selectedCoursesService.removeByMap(selmap);
                 if (savecourse)
                     continue;
@@ -335,15 +334,15 @@ public class SelectcourseController {
     @GetMapping("/students/{userId}/courses/score")
     public Result scoreclass(@PathVariable("userId") String userid) throws JsonProcessingException {
 
-        List<SelectedCourses> selectno=selectedCoursesService.lambdaQuery()
-                .eq(SelectedCourses::getStudentId,userid).list();
-        if(selectno.size()==0)
+        List<SelectedCourses> selectno = selectedCoursesService.lambdaQuery()
+                .eq(SelectedCourses::getStudentId, userid).list();
+        if (selectno.size() == 0)
             return Result.fail();
         List<String> response = new ArrayList<>();
         Integer no;
-        int courseid,teacherid;
+        int courseid, teacherid;
 
-        CourseScore courseScore=new CourseScore();
+        CourseScore courseScore = new CourseScore();
 
         for (int i = 0; i < selectno.size(); i++) {
             no = selectno.get(i).getCurrentCourseId();
@@ -361,10 +360,10 @@ public class SelectcourseController {
             courseScore.setScore(selectno.get(i).getScore());
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(courseScore);
-            response.add(i,json);
+            response.add(i, json);
         }
 
-        return selectno.size() > 0 ? Result.suc(response,selectno.size()) : Result.fail();
+        return selectno.size() > 0 ? Result.suc(response, selectno.size()) : Result.fail();
     }
 
 }

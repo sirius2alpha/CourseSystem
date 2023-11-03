@@ -71,7 +71,7 @@ export default {
   // data of the component
   data() {
     return {
-      userId: "100021",
+      userId: "",
       password: "123456",
       userName: "default",
       host: "http://127.0.0.1:9000",

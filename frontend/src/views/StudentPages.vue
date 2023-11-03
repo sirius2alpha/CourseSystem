@@ -363,7 +363,7 @@ export default {
           this.fetchCourses(); // 重新查询课表
         }
         else if (result.code == 401) {
-          ElMessage.warning("该课程已选");
+          ElMessage.warning(response.data.msg);
         }
         else {
           ElMessage.error("选课失败：" + result.message);
