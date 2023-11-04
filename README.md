@@ -1,6 +1,6 @@
 ## 技术栈
 
-![系统架构图](https://s2.loli.net/2023/11/04/lM9hGvJ7w58AbBt.png)
+![系统架构图](https://s2.loli.net/2023/11/04/6MXEqsY5A8lTzGD.png)
 
 ## 前端
 
@@ -251,7 +251,7 @@ https://juejin.cn/post/7262179139897016380
 
 ### 2.1 系统架构
 
-![系统架构图](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008162.png)
+![系统架构图](https://s2.loli.net/2023/11/04/zreEc1khOHxR4Zy.png)
 
 整个教务系统的设计采用了一系列成熟的技术，以确保系统的可靠性和可维护性。以下是对系统设计的进一步扩展：
 
@@ -275,7 +275,7 @@ MVC的全名是Model View Controller，是模型(Model)－视图(view)－控制�
 - 视图层（View）：是应用和用户之间的接口，它负责将应用显示给用户 和 显示模型的状态。
 - 控制器（Controller）:控制器负责视图和模型之间的交互，控制对用户输入的响应、响应方式和流程；它主要负责两方面的动作，一是把用户的请求分发到相应的模型，二是吧模型的改变及时地反映到视图上。
 
-![MVC model](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699032934.png)
+![MVC model](https://s2.loli.net/2023/11/04/jRsoLNWy1aMTvBK.png)
 
 以我们系统中的用户User对象为例，我们需要分别编写 UserMapper，UserService，和 UserController 来管理与 User 相关的操作。其中 User 对象类充当了模型（Model）的角色，用于处理应用程序的数据和业 务逻辑。UserMapper 充当了数据访问层（Data Access Layer）的角色，负责与数据库进行交互，将数据存储 和检索操作封装在数据访问对象（Data Access Object，DAO）中。UserService 充当了业务逻辑层（Business Logic Layer）的角色，负责处理业务逻辑，将业务操作封装在服务（Service）中。最后，UserController 充 当了控制器（Controller）的角色，负责处理用户请求，并将请求发送给对应的模型进行处理。 在 MVC 架构中，模型、视图和控制器各自独立，彼此之间耦合度较低。这种分离可以使代码更加可维护和可扩展，同时也可以使我们小组中每个人专注于自己的分工领域，提高了开发效率.
 
@@ -324,7 +324,7 @@ MVC的全名是Model View Controller，是模型(Model)－视图(view)－控制�
 
 #### 2.4.3 前后端接口设计
 
-![接口概要](https://s2.loli.net/2023/11/04/1VW7GwcvI3X5DLN.png)
+![接口概要](https://s2.loli.net/2023/11/04/XoMf3gxPTI7zw68.png)
 
 
 
@@ -332,7 +332,7 @@ MVC的全名是Model View Controller，是模型(Model)－视图(view)－控制�
 
 ### 2.5 数据库概念设计
 
-![思维导图](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1698986931.png)
+![思维导图](https://s2.loli.net/2023/11/04/eBUrjA1qM3Isgvi.png)
 
 选课系统主要由两个部分组成：学生、教师。
 
@@ -361,7 +361,7 @@ MVC的全名是Model View Controller，是模型(Model)－视图(view)－控制�
 
 
 
-![表关系](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1698987548.png)
+![表关系](https://s2.loli.net/2023/11/04/WNJUmHIDQ97fnKZ.png)
 
 **学生表** 用于存储学生的基本信息，包括学号、姓名、院系号等。
 
@@ -623,7 +623,7 @@ src
 
 登录页面输入学生或者老师的账号就能实现登录，并能够根据自动跳转到学生界面或者老师的界面。
 
-![登录页面](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008642.png)
+<img src="https://s2.loli.net/2023/11/04/RM6uQDtzjgqHEZy.png" alt="登录页面" style="zoom:150%;" />
 
 #### 3.3.2学生界面
 
@@ -633,19 +633,19 @@ src
 
 选课功能如下，对课程号、课程名、教师号、教师姓名、上课时间进行检索，之后会返回相应开课信息。
 
-![学生选课-1](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699009956.png)
+![学生选课-1](/home/yoho/Desktop/upgit_20231103_1699009956.png)
 
 **退课功能**
 
 通过多选框勾选要退选的课程，点击退课按钮，就会向后端发送退课的请求，之后再重新查询已选课程信息，响应式更新页面内容。
 
-![学生-退课](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699010298.png)
+![学生-退课](/home/yoho/Desktop/upgit_20231103_1699010298.png)
 
 **成绩查询**
 
 点击边栏的成绩查询功能，会触发绑定的函数fetchScores()，在选课表中的该学生进行查询，查询他的所有课程和成绩。分数那一栏没有成绩说明老师还没有进行成绩录入。
 
-![学生-成绩查询](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699010525.png)
+![学生-成绩查询](/home/yoho/Desktop/upgit_20231103_1699010525.png)
 
 **课表查询**
 
@@ -695,7 +695,7 @@ src
     });
 ```
 
-![image-20231103193058119](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699011058.png)
+![image-20231103193058119](/home/yoho/Desktop/upgit_20231103_1699011058.png)
 
 #### 3.3.3 教师界面
 
@@ -707,13 +707,13 @@ src
 
 功能2是对班级内的学生进行成绩的登入。
 
-![image-20231103185104378](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008664.png)
+![image-20231103185104378](/home/yoho/Desktop/upgit_20231103_1699008664.png)
 
 **成绩录入**
 
 在点击成绩录入之后，在单选框这里选择班级，就可以对学生的平时成绩和考试成绩进行录入。后端会根据平时成绩和考试成绩对应的占比（3:7）生成总评成绩，并保存在数据库中。
 
-![教师-成绩录入](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699013770.png)
+![教师-成绩录入](/home/yoho/Desktop/upgit_20231103_1699013770.png)
 
 
 
@@ -892,7 +892,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 在登录界面，测试人员进行下述测试：
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699034040.png" alt="image-20231104015400494" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/XP4pdgRTeIh7sGc.png" alt="image-20231104144650885" style="zoom:150%;" />
 
  
 
@@ -902,7 +902,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 数据库中的学生全部是23开头，例如231000谢晓明，密码默认为123456。如果输入正确，则跳转到学生界面，否则报错。下图的测试示例中，使用了过长的用户名，显示“登录失败”。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699034018.png" alt="image-20231104015338849" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/4LFmM8IJyvTbjXV.png" alt="image-20231104144700544" style="zoom:150%;" />
 
 ​														**图 不合规用户名报错实例**
 
@@ -910,7 +910,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 教师的用户名均为1开头，和学生登入的规则一样，如果教师输入了错误的用户名或者密码，也会返回错误信息。下图的测试中，输入了错误的密码。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699034007.png" alt="image-20231104015327133" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/wZoyXLcU32hVNJe.png" alt="image-20231104144711023" style="zoom:150%;" />
 
 ​														**图 错误密码报错实例**
 
@@ -920,7 +920,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 以231000谢晓明为例，进入学生界面后，首先停留在选课界面。
 
-<img src="/home/yoho/.config/Typora/typora-user-images/image-20231104015238213.png" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/jgVwyCMSnWlr165.png" alt="image-20231104144721283" style="zoom:150%;" />
 
 ​														**图 登录成功的学生界面视图**
 
@@ -928,7 +928,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 学生可以进行查询和选课的操作。当查询成功或者选择成功后，都会返回操作成功的提示。
 
-​				<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699032354.png" alt="image-20231104012554657" style="zoom:150%;" /><img src="/home/yoho/.config/Typora/typora-user-images/image-20231104012602833.png" alt="image-20231104012602833" style="zoom:150%;" />
+​				![image-20231104144729043](https://s2.loli.net/2023/11/04/elsBEz8FyvAtdiM.png)![image-20231104144735949](https://s2.loli.net/2023/11/04/vlim6dKZWHFV7Gj.png)
 
 ​														**图 课程查询（左）和选课示例（右）**
 
@@ -936,7 +936,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 选课后，学生如果有不想继续选择的课，可以进入退课界面，勾选想退的课，并一键退课。
 
-​				<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033937.png" alt="image-20231104015217476" style="zoom:150%;" /><img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699032414.png" alt="image-20231104012654807" style="zoom:150%;" />
+​				![image-20231104144758503](https://s2.loli.net/2023/11/04/fJlGbNdUrVKAvOo.png)![image-20231104144802532](https://s2.loli.net/2023/11/04/IuB1i84wsbjRYEG.png)
 
 ​														**图 退课界面（左）与退课成功提示（右）**
 
@@ -944,7 +944,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 在选课的过程中，学生可以通过查看当前的课程表，来辅助进行排课。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699032454.png" alt="image-20231104012734782" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/KZ8ALErWexVQINm.png" alt="image-20231104144806136" style="zoom:150%;" />
 
 ​														**图 学生课程表视图**
 
@@ -952,7 +952,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 同时，学生还可以在教务系统中查看自己所选的课程的成绩。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033919.png" alt="image-20231104015159274" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/lM6IkiXcjYUfRgP.png" alt="image-20231104144813943" style="zoom:150%;" />
 
 ​														**图 学生成绩查询界面视图**
 
@@ -962,7 +962,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 教师号的id开头是1，通过输入教师id并登录，可以进入到教师默认的开课详情界面，同时成功进入时提示。例如，测试用例为100021贾致远老师，进入到默认界面后，可以看到他开设了两门课程，分别是1019 golang和1005离散数学，同时还显示了这两门课程的课程容量、已选人数和上课时间。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033892.png" alt="image-20231104015132790" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/6yW4SRVlIDxoNAq.png" alt="image-20231104144833999" style="zoom:150%;" />
 
 ​														**图 教师开课详情界面示例**
 
@@ -970,7 +970,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 教师的工作之一就是管理学生的成绩。点开成绩录入页面，可以看到贾致远老师能够选择他所开设的课程，并为选择他的课程的所有学生录入成绩。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033844.png" alt="image-20231104015043969" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/PUcWv4sFekYTniB.png" alt="image-20231104144847549" style="zoom:150%;" />
 
 ​														**图 教师成绩录入功能的班级选择选项视图**
 
@@ -978,13 +978,13 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 此处的测试用例为1005 离散数学课程。选择课程后，页面上自动显示出选择了该门课程的学生的列表，如图，这门课只有一名学生，是231043龙安琪。贾致远老师此时可以为他等级成绩，假设龙安琪的成绩是60 - 60，登记完毕后选择保存，系统提示保存成功。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033811.png" alt="image-20231104015010967" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/ZobsMh1aqVXpec7.png" alt="image-20231104144855051" style="zoom:150%;" />
 
 ​														**图 教师成绩录入成功示例**
 
 此时再返回登录界面，登录龙安琪的账号，查看他所选课程的成绩，可以看到贾致远老师的成绩已经成功录入，可以被查询。
 
-<img src="/home/yoho/.config/Typora/typora-user-images/image-20231104014938144.png" alt="image-20231104014938144" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/JOwIXjgPZeuMYs9.png" alt="image-20231104144902703" style="zoom:150%;" />
 
 ​														**图 学生成绩录入成功示例**
 
@@ -994,7 +994,7 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 为了测试网站的功能，该部分从学生选课开始进行全部流程。登入231043龙安琪的账号，为他选择课程。其中，当课程已选时，无法选择重名课程。
 
-<img src="/home/yoho/.config/Typora/typora-user-images/image-20231104014845681.png" alt="image-20231104014845681" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/RGniC4QtD8N5rwA.png" alt="image-20231104144911051" style="zoom:150%;" />
 
 ​														**图 无法重复选择课程示例**
 
@@ -1002,12 +1002,12 @@ public Result updatescore(@RequestBody List<score> Score, @PathVariable("userId"
 
 测试用例中，龙安琪选择了如下课程：
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033632.png" alt="image-20231104014712146" style="zoom:150%;" />
+<img src="https://s2.loli.net/2023/11/04/nACZDdQ9BoWu4MH.png" alt="image-20231104144917698" style="zoom:150%;" />
 
 ​														**图 龙安琪选择的课表示例**
 
 接着登入贾致远老师，为龙安琪录入成绩60 - 60。返回龙安琪的成绩查询界面，可以看到数据成功被录入，而未被录入的课程成绩显示为空。
 
-<img src="https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231104_1699033693.png" alt="image-20231104014813298" style="zoom:150%;" />
+![image-20231104144924879](https://s2.loli.net/2023/11/04/Gw5coEsFHpCni9v.png)
 
 ​														**图 未被录入的成绩显示为空示例**
