@@ -1,6 +1,6 @@
 ## 技术栈
 
-![系统架构图](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1699008162.png)
+![系统架构图](https://s2.loli.net/2023/11/04/lM9hGvJ7w58AbBt.png)
 
 ## 前端
 
@@ -324,7 +324,7 @@ MVC的全名是Model View Controller，是模型(Model)－视图(view)－控制�
 
 #### 2.4.3 前后端接口设计
 
-![接口概要](https://raw.githubusercontent.com/sirius2alpha/Typora-pics/master/2023/11/upgit_20231103_1698988238.png)
+![接口概要](https://s2.loli.net/2023/11/04/1VW7GwcvI3X5DLN.png)
 
 
 
