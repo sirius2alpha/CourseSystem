@@ -8,6 +8,10 @@
 
 确保在电脑上已经安装node.js和npm
 
+
+
+在/frontend目录下
+
 执行命令`npm install`从pakage.json中安装依赖；
 
 执行命令`npm run serve`启动项目
@@ -16,7 +20,19 @@
 
 ## 后端
 
+#### 版本说明
+
 使用Maven进行构建项目
+
+java版本都行，不行试试java8，好像java17也能跑
+
+
+
+#### 后端启用
+
+在包含有pom.xml的目录下执行`mvn clean install`执行项目的构建；
+
+在生成的/target的目录下会有一个.jar文件，直接运行这个文件就可以了`java -jar ******.jar`
 
 
 
@@ -31,6 +47,21 @@
 -   教学计划表 course_plan
 -   学院表 colleges
 -   登录管理表 users
+
+
+
+#### 把sql文件导入到本地的mysql中
+
+在本地安装好mysql环境之后，记得要在项目中修改mysql的登录用户名和密码（在CourseSystem-main/project_springboot/src/main/resources/application.yml中）
+
+注意本地的数据库的名字应该为course-system，不然读取不到数据库。
+
+登录上mysql之后，在含有course-system.sql的目录下执行
+
+```sql
+create database `course-system`;
+source course-system.sql;
+```
 
 
 
