@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author ge
@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private UserMapper userMapper;
+
     @Override
     public IPage pageC(Page<User> page) {
         return userMapper.pageC(page);
@@ -30,6 +31,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public IPage pageCC(Page<User> page, Wrapper wrapper) {
-        return userMapper.pageCC(page,wrapper);
+        return userMapper.pageCC(page, wrapper);
     }
 }
