@@ -94,7 +94,7 @@ java17，java8都能跑，其他的版本没有测试
 
 ### git使用教程
 
-[git使用教程](https://sirius1y.me/posts/notes/dev/%E6%8C%87%E5%8D%97%E5%9B%A2%E9%98%9Fgit%E5%8D%8F%E4%BD%9C/)
+[git使用教程](https://sirius1y.top/posts/notes/tools/git-use/)
 
 ### 项目文档、报告
 
