@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.project.entity.Students;
-import com.example.project.entity.Teachers;
-import com.example.project.mapper.StudentsMapper;
-import com.example.project.mapper.TeachersMapper;
-import com.example.project.service.StudentsService;
+import com.example.project.mapper.StudentMapper;
+import com.example.project.service.StudentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +20,17 @@ import javax.annotation.Resource;
  * @since 2023-11-01
  */
 @Service
-public class StudentsServiceImpl extends ServiceImpl<StudentsMapper, Students> implements StudentsService {
+public class StudentServiceImpl extends ServiceImpl<StudentMapper, Students> implements StudentService {
 
     @Resource
-    private StudentsMapper studentsMapper;
+    private StudentMapper studentMapper;
     @Override
     public IPage pageC(Page<Students> page) {
-        return studentsMapper.pageC(page);
+        return studentMapper.pageC(page);
     }
 
     @Override
     public IPage pageCC(Page<Students> page, Wrapper wrapper) {
-        return studentsMapper.pageCC(page,wrapper);
+        return studentMapper.pageCC(page,wrapper);
     }
 }

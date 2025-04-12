@@ -26,14 +26,9 @@
             <div class="day-header">{{ day.label }}</div>
             <div class="course-slots">
               <div v-for="slot in timeSlots" :key="`${day.id}-${slot.id}`" class="course-slot">
-                <div 
-                  v-for="course in getCoursesForSlot(day.id, slot.id)" 
-                  :key="course.course_id" 
-                  class="course-card"
-                  :style="{ backgroundColor: getCourseColor(course.course_id) }"
-                >
-                  <div class="course-name">{{ course.course_name }}</div>
-                  <div class="course-info">{{ course.teacher_name }}</div>
+                <div v-for="course in getCoursesForSlot(day.id, slot.id)" :key="course.course_id || course.courseId" class="course-card" :style="{ backgroundColor: getCourseColor(course.course_id || course.courseId) }">
+                  <div class="course-name">{{ course.course_name || course.courseName }}</div>
+                  <div class="course-info">{{ course.teacher_name || course.teacherName }}</div>
                 </div>
               </div>
             </div>
@@ -43,7 +38,7 @@
 
       <!-- 列表视图 -->
       <div v-else class="list-view">
-        <el-table :data="myCourses" style="width: 100%" :header-cell-style="{ background: '#f5f7fa' }" border stripe>
+        <el-table :data="normalizedCourses" style="width: 100%" :header-cell-style="{ background: '#f5f7fa' }" border stripe>
           <el-table-column prop="course_id" label="课程号" width="100" />
           <el-table-column prop="course_name" label="课程名" min-width="150" />
           <el-table-column prop="teacher_name" label="教师姓名" width="120" />
@@ -129,13 +124,28 @@ export default {
       courseColors: {}
     };
   },
+  computed: {
+    normalizedCourses() {
+      return this.myCourses.map(course => ({
+        course_id: course.course_id || course.courseId,
+        course_name: course.course_name || course.courseName,
+        teacher_id: course.teacher_id || course.teacherId,
+        teacher_name: course.teacher_name || course.teacherName,
+        capacity: course.capacity,
+        selected_number: course.selected_number || course.selectedNumber,
+        time: course.time
+      }));
+    }
+  },
   methods: {
     getCoursesForSlot(dayId, slotId) {
       console.log('myCourses:', this.myCourses);
       
       return this.myCourses.filter(course => {
+        // 兼容驼峰命名和下划线命名
+        const courseName = course.course_name || course.courseName;
         const timeStr = course.time || '';
-        console.log(`课程 ${course.course_name} 时间: ${timeStr}`);
+        console.log(`课程 ${courseName || '未知课程'} 时间: ${timeStr}`);
         
         // 匹配星期
         const dayChar = this.getDayChar(dayId);
@@ -183,7 +193,16 @@ export default {
     },
     
     showCourseDetail(course) {
-      this.selectedCourse = course;
+      // 创建一个标准化的课程对象，兼容两种命名格式
+      this.selectedCourse = {
+        course_id: course.course_id || course.courseId,
+        course_name: course.course_name || course.courseName,
+        teacher_name: course.teacher_name || course.teacherName,
+        teacher_id: course.teacher_id || course.teacherId,
+        capacity: course.capacity,
+        selected_number: course.selected_number || course.selectedNumber,
+        time: course.time
+      };
       this.dialogVisible = true;
     }
   }

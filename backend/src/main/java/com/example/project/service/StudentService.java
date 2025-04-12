@@ -1,36 +1,22 @@
 package com.example.project.service;
 
-import com.example.project.common.Result;
-import com.example.project.entity.Course;
-import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.project.entity.Students;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * 学生服务接口
+ * <p>
+ *  服务类
+ * </p>
+ *
+ * @author ge
+ * @since 2023-11-01
  */
-public interface StudentService {
-    
-    /**
-     * 获取学生已选课程
-     */
-    Result getSelectedCourses(String studentId);
-    
-    /**
-     * 选课
-     */
-    Result selectCourses(String studentId, List<Course> courses);
-    
-    /**
-     * 退课
-     */
-    Result deleteCourses(String studentId, List<Course> courses);
-    
-    /**
-     * 获取学生成绩
-     */
-    Result getScores(String studentId);
-    
-    /**
-     * 获取学生信息
-     */
-    Result getStudentInfo(String studentId);
+public interface StudentService extends IService<Students> {
+
+    IPage pageC(Page<Students> page);
+
+    IPage pageCC(Page<Students> page, Wrapper wrapper);
 }

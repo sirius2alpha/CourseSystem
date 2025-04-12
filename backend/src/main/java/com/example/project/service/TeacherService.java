@@ -1,6 +1,6 @@
 package com.example.project.service;
 
-import com.example.project.entity.CurrentCourses;
+import com.example.project.entity.Teachers;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author ge
  * @since 2023-10-23
  */
-public interface CurrentCoursesService extends IService<CurrentCourses> {
+public interface TeacherService extends IService<Teachers> {
 
 }

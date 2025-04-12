@@ -36,8 +36,8 @@
         <el-table-column prop="teacher_name" label="教师姓名" align="center" width="120" />
         <el-table-column label="分数" align="center" width="120">
           <template #default="scope">
-            <div v-if="isScorePublished(scope.row.score)" class="score-cell" :class="getScoreClass(scope.row.score)">
-              {{ scope.row.score }}
+            <div v-if="isScorePublished(scope.row.score)" class="score-cell" :class="getScoreClass(getDisplayScore(scope.row))">
+              {{ getDisplayScore(scope.row) }}
             </div>
             <div v-else class="score-cell unpublished">
               未发布
@@ -46,8 +46,8 @@
         </el-table-column>
         <el-table-column label="状态" align="center" width="100">
           <template #default="scope">
-            <el-tag v-if="isScorePublished(scope.row.score)" :type="getScoreStatus(scope.row.score).type" size="small">
-              {{ getScoreStatus(scope.row.score).label }}
+            <el-tag v-if="isScorePublished(scope.row.score) && getDisplayScore(scope.row) !== '未发布'" :type="getScoreStatus(getDisplayScore(scope.row)).type" size="small">
+              {{ getScoreStatus(getDisplayScore(scope.row)).label }}
             </el-tag>
             <el-tag v-else type="info" size="small">
               未发布
@@ -95,21 +95,29 @@ export default {
     averageScore() {
       if (!this.hasPublishedScores) return "暂无";
       
+      let validScores = 0;
       const totalScore = this.publishedCourses.reduce((sum, course) => {
-        return sum + parseFloat(course.score);
+        const score = this.getDisplayScore(course);
+        // 确保分数是有效数字，而不是"未发布"等文本
+        if (score !== "未发布" && !isNaN(parseFloat(score))) {
+          validScores++;
+          return sum + parseFloat(score);
+        }
+        return sum;
       }, 0);
       
-      return (totalScore / this.publishedCourses.length).toFixed(1);
+      if (validScores === 0) return "暂无";
+      return (totalScore / validScores).toFixed(1);
     },
     
     // 计算已通过课程数量
     passedCourses() {
-      return this.publishedCourses.filter(course => parseFloat(course.score) >= 60).length;
+      return this.publishedCourses.filter(course => parseFloat(this.getDisplayScore(course)) >= 60).length;
     },
     
     // 计算未通过课程数量
     failedCourses() {
-      return this.publishedCourses.filter(course => parseFloat(course.score) < 60).length;
+      return this.publishedCourses.filter(course => parseFloat(this.getDisplayScore(course)) < 60).length;
     },
     
     // 计算未发布成绩的课程数量
@@ -128,7 +136,7 @@ export default {
       };
       
       this.publishedCourses.forEach(course => {
-        const score = parseFloat(course.score);
+        const score = parseFloat(this.getDisplayScore(course));
         if (score >= 90) {
           distribution['90-100']++;
         } else if (score >= 80) {
@@ -148,7 +156,22 @@ export default {
   methods: {
     // 判断成绩是否已发布
     isScorePublished(score) {
-      return score !== null && score !== undefined && score !== "" && score !== "未发布";
+      // 检查总评成绩
+      if (score !== null && score !== undefined && score !== "" && score !== "未发布") {
+        return true;
+      }
+      
+      // 如果总评成绩不存在，还可以检查行数据的平时成绩和考试成绩
+      const row = this.myCourses.find(course => course.score === score);
+      if (row) {
+        const hasDailyScore = row.daily_score !== null && row.daily_score !== undefined && row.daily_score !== 0;
+        const hasExamScore = row.examination_score !== null && row.examination_score !== undefined && row.examination_score !== 0;
+        
+        // 如果平时成绩或考试成绩有值，也认为成绩已发布
+        return hasDailyScore || hasExamScore;
+      }
+      
+      return false;
     },
     
     // 获取成绩样式类
@@ -163,6 +186,11 @@ export default {
     
     // 获取成绩状态
     getScoreStatus(score) {
+      // 如果分数是"未发布"或不是有效数字，返回"未发布"状态
+      if (score === "未发布" || isNaN(parseFloat(score))) {
+        return { type: 'info', label: '未发布' };
+      }
+      
       const numScore = parseFloat(score);
       if (numScore >= 90) return { type: 'success', label: '优秀' };
       if (numScore >= 80) return { type: 'success', label: '良好' };
@@ -180,6 +208,27 @@ export default {
         case '60-69': return 'pass';
         default: return 'fail';
       }
+    },
+    
+    // 获取显示分数
+    getDisplayScore(row) {
+      // 如果有总评成绩，直接返回
+      if (row.score !== null && row.score !== undefined && row.score !== "" && row.score !== "未发布") {
+        return row.score;
+      }
+      
+      // 否则根据平时成绩和考试成绩计算总评成绩
+      const dailyScore = parseFloat(row.daily_score || 0);
+      const examScore = parseFloat(row.examination_score || 0);
+      
+      // 只有当平时成绩和考试成绩都有有效值时才计算
+      if (!isNaN(dailyScore) && !isNaN(examScore) && (dailyScore > 0 || examScore > 0)) {
+        // 按照 40% 平时成绩 + 60% 考试成绩计算
+        const finalScore = (dailyScore * 0.4 + examScore * 0.6).toFixed(1);
+        return finalScore;
+      }
+      
+      return "未发布";
     }
   }
 };

@@ -300,14 +300,14 @@ export default {
         if (courseData != null) {
           ElMessage.success('选课信息查询成功');
           this.courseInfo = courseData.map((course) => {
-            const selectedCourse = JSON.parse(course);
+            const selectedCourse = typeof course === 'string' ? JSON.parse(course) : course;
             return {
-              course_id: selectedCourse.course_id,
-              course_name: selectedCourse.course_name,
-              teacher_id: selectedCourse.teacher_id,
-              teacher_name: selectedCourse.teacher_name,
+              course_id: selectedCourse.course_id || selectedCourse.courseId,
+              course_name: selectedCourse.course_name || selectedCourse.courseName,
+              teacher_id: selectedCourse.teacher_id || selectedCourse.teacherId,
+              teacher_name: selectedCourse.teacher_name || selectedCourse.teacherName,
               capacity: selectedCourse.capacity,
-              selected_number: selectedCourse.selected_number,
+              selected_number: selectedCourse.selected_number || selectedCourse.selectedNumber,
               time: selectedCourse.time
             };
           });
@@ -329,10 +329,27 @@ export default {
       try {
         const response = await axios.get(apiUrl);
         const courseData = response.data;
-        this.myCourses = courseData.data.map(course => JSON.parse(course));
+        if (courseData.code === 200 && courseData.data) {
+          this.myCourses = courseData.data.map(course => {
+            const courseObj = typeof course === 'string' ? JSON.parse(course) : course;
+            return {
+              course_id: courseObj.course_id || courseObj.courseId,
+              course_name: courseObj.course_name || courseObj.courseName,
+              teacher_id: courseObj.teacher_id || courseObj.teacherId,
+              teacher_name: courseObj.teacher_name || courseObj.teacherName,
+              capacity: courseObj.capacity,
+              selected_number: courseObj.selected_number || courseObj.selectedNumber,
+              time: courseObj.time
+            };
+          });
+        } else {
+          ElMessage.warning(courseData.message || "当前没有已选课程");
+          this.myCourses = [];
+        }
       } catch (error) {
         console.error("课表信息查询失败", error);
         ElMessage.error("课表信息查询失败");
+        this.myCourses = [];
       }
     },
 
@@ -352,15 +369,16 @@ export default {
       
       try {
         const requestBody = this.selectedCourses.map(course => ({
-          course_id: course.course_id,
-          course_name: course.course_name,
-          teacher_id: course.teacher_id,
-          teacher_name: course.teacher_name,
+          courseId: course.course_id,
+          courseName: course.course_name,
+          teacherId: course.teacher_id,
+          teacherName: course.teacher_name,
           capacity: course.capacity,
-          selected_number: course.selected_number,
+          selectedNumber: course.selected_number,
           time: course.time,
         }));
 
+        console.log("选课请求数据:", JSON.stringify(requestBody));
         const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
         const response = await axios.post(apiUrl, requestBody);
 
@@ -375,7 +393,11 @@ export default {
         }
       } catch (error) {
         console.error("选课操作失败", error);
-        ElMessage.error("选课操作失败");
+        if (error.response && error.response.data) {
+          ElMessage.error("选课失败：" + error.response.data.message);
+        } else {
+          ElMessage.error("选课操作失败，请稍后重试");
+        }
       }
     },
 
@@ -387,15 +409,16 @@ export default {
       
       try {
         const requestBody = this.deletedCourses.map(course => ({
-          course_id: course.course_id,
-          course_name: course.course_name,
-          teacher_id: course.teacher_id,
-          teacher_name: course.teacher_name,
+          courseId: course.course_id,
+          courseName: course.course_name,
+          teacherId: course.teacher_id,
+          teacherName: course.teacher_name,
           capacity: course.capacity,
-          selected_number: course.selected_number,
+          selectedNumber: course.selected_number,
           time: course.time,
         }));
 
+        console.log("退课请求数据:", JSON.stringify(requestBody));
         const apiUrl = `${this.host}/api/students/${this.userId}/courses`;
         const response = await axios.delete(apiUrl, { data: requestBody });
 
@@ -404,28 +427,60 @@ export default {
           this.deletedCourses = [];
           this.fetchCourses();
         } else {
-          ElMessage.error("退课失败：" + response.data.msg);
+          ElMessage.error("退课失败：" + response.data.message);
         }
       } catch (error) {
         console.error("退课操作失败", error);
-        ElMessage.error("退课操作失败");
+        if (error.response && error.response.data) {
+          ElMessage.error("退课失败：" + error.response.data.message);
+        } else {
+          ElMessage.error("退课操作失败，请稍后重试");
+        }
       }
     },
 
     async fetchScores() {
       const apiUrl = `${this.host}/api/students/${this.userId}/courses/score`;
       try {
+        console.log('开始获取成绩数据...');
         const response = await axios.get(apiUrl);
-
-        if (response.data.code == 200) {
-          const scoreData = response.data;
-          this.myScores = scoreData.data.map(score => JSON.parse(score));
+        console.log('获取到的原始成绩数据:', response.data);
+        
+        const scoreData = response.data;
+        
+        if (scoreData.code === 200 && scoreData.data) {
+          // 标准化成绩数据格式
+          this.myScores = scoreData.data.map(score => {
+            // 如果是字符串，先解析为对象
+            const scoreObj = typeof score === 'string' ? JSON.parse(score) : score;
+            console.log('处理成绩数据项:', scoreObj);
+            
+            // 返回标准化后的成绩对象，兼容两种命名格式
+            return {
+              course_id: scoreObj.course_id || scoreObj.courseId,
+              course_name: scoreObj.course_name || scoreObj.courseName,
+              teacher_id: scoreObj.teacher_id || scoreObj.teacherId,
+              teacher_name: scoreObj.teacher_name || scoreObj.teacherName,
+              time: scoreObj.time,
+              daily_score: scoreObj.daily_score || scoreObj.dailyScore,
+              examination_score: scoreObj.examination_score || scoreObj.examinationScore,
+              score: scoreObj.score,
+              capacity: scoreObj.capacity,
+              selected_number: scoreObj.selected_number || scoreObj.selectedNumber
+            };
+          });
+          
+          console.log('成绩数据加载成功:', this.myScores);
         } else {
-          ElMessage.error("成绩信息查询失败");
+          console.warn('成绩数据为空或格式不正确:', scoreData);
+          ElMessage.warning(scoreData.message || "暂无成绩信息");
+          this.myScores = [];
         }
       } catch (error) {
         console.error("成绩信息查询失败", error);
+        console.error("错误详情:", error.response ? error.response.data : '无响应数据');
         ElMessage.error("成绩信息查询失败");
+        this.myScores = [];
       }
     },
     
@@ -456,8 +511,18 @@ export default {
       });
     }
   },
+  watch: {
+    selectedFunction(newVal) {
+      if (newVal === '成绩查询') {
+        this.fetchScores();
+      }
+    }
+  },
   mounted() {
     this.fetchCourses();
+    if (this.selectedFunction === '成绩查询') {
+      this.fetchScores();
+    }
   }
 };
 </script>

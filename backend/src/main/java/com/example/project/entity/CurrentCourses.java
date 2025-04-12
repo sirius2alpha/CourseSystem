@@ -3,8 +3,8 @@ package com.example.project.entity;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +18,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="CurrentCourses对象", description="")
+@TableName("current_courses")
+@ApiModel(value = "CurrentCourses对象", description = "")
 public class CurrentCourses implements Serializable {
 
     private static final long serialVersionUID = 1L;

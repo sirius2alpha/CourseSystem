@@ -311,7 +311,20 @@ export default {
 
         if (response.data.code === 200) {
           const courseData = response.data;
-          this.myCourses = courseData.data.map(course => JSON.parse(course));
+          this.myCourses = courseData.data.map(course => {
+            // 先解析字符串（如果需要）
+            const courseObj = typeof course === 'string' ? JSON.parse(course) : course;
+            // 标准化属性名
+            return {
+              course_id: courseObj.course_id || courseObj.courseId,
+              course_name: courseObj.course_name || courseObj.courseName,
+              teacher_id: courseObj.teacher_id || courseObj.teacherId,
+              teacher_name: courseObj.teacher_name || courseObj.teacherName,
+              capacity: courseObj.capacity,
+              selected_number: courseObj.selected_number || courseObj.selectedNumber,
+              time: courseObj.time
+            };
+          });
         } else {
           ElMessage.error("课程信息查询失败");
         }
@@ -337,19 +350,29 @@ export default {
           console.log('学生数据结构:', studentsData);
           
           if (Array.isArray(studentsData)) {
-            this.tableData = studentsData.map(studentJson => {
-              const student = JSON.parse(studentJson);
-              console.log('解析后的学生数据:', student);
+            this.tableData = studentsData.map(student => {
+              // 解析学生数据（如果是字符串）
+              const studentObj = typeof student === 'string' ? JSON.parse(student) : student;
               
-              const hasScore = student.daily_score !== null && student.daily_score !== undefined && 
-                              student.examination_score !== null && student.examination_score !== undefined &&
-                              (student.daily_score > 0 || student.examination_score > 0);
+              // 获取平时成绩和考试成绩
+              const dailyScore = studentObj.daily_score || studentObj.dailyScore;
+              const examinationScore = studentObj.examination_score || studentObj.examinationScore;
+              
+              // 确保studentId是字符串格式
+              const studentId = String(studentObj.student_id || studentObj.studentId || '');
+              const studentName = studentObj.student_name || studentObj.studentName || '';
+              
+              console.log(`处理学生: ID=${studentId}, 姓名=${studentName}, 平时成绩=${dailyScore}, 考试成绩=${examinationScore}`);
+              
+              const hasScore = dailyScore !== null && dailyScore !== undefined && 
+                              examinationScore !== null && examinationScore !== undefined &&
+                              (parseFloat(dailyScore) > 0 || parseFloat(examinationScore) > 0);
               
               return {
-                student_id: student.student_id,
-                student_name: student.student_name,
-                daily_score: parseFloat(student.daily_score),
-                examination_score: parseFloat(student.examination_score),
+                student_id: studentId,
+                student_name: studentName,
+                daily_score: parseFloat(dailyScore) || 0,
+                examination_score: parseFloat(examinationScore) || 0,
                 hasScore: hasScore,
                 isEditing: !hasScore
               };
@@ -388,7 +411,18 @@ export default {
 
         if (response.data.code === 200) {
           const courseData = response.data;
-          this.courseStudents = courseData.data.map(course => JSON.parse(course));
+          this.courseStudents = courseData.data.map(student => {
+            // 解析学生数据（如果是字符串）
+            const studentObj = typeof student === 'string' ? JSON.parse(student) : student;
+            // 标准化属性
+            return {
+              student_id: studentObj.student_id || studentObj.studentId,
+              student_name: studentObj.student_name || studentObj.studentName,
+              daily_score: studentObj.daily_score || studentObj.dailyScore,
+              examination_score: studentObj.examination_score || studentObj.examinationScore,
+              score: studentObj.score
+            };
+          });
           this.studentsDialogVisible = true;
         } else {
           ElMessage.error("学生名单查询失败");
@@ -405,34 +439,161 @@ export default {
         return;
       }
       
+      // 筛选出被修改过的学生成绩
+      const modifiedStudents = this.tableData.filter(student => 
+        student.isEditing || 
+        (this.originalScores[student.student_id] && 
+         (this.originalScores[student.student_id].daily_score !== student.daily_score || 
+          this.originalScores[student.student_id].examination_score !== student.examination_score))
+      );
+      
+      if (modifiedStudents.length === 0) {
+        this.$message.warning('没有修改任何学生的成绩');
+        return;
+      }
+      
+      console.log('需要保存的修改过的学生成绩:', modifiedStudents);
+      
       this.submitting = true;
+      
+      // 记录成功和失败的学生
+      const successStudents = [];
+      const failedStudents = [];
+      
       try {
-        const apiUrl = `${this.host}/api/teachers/${this.userId}/courses/${this.selectedCourse}`;
+        // 只保存修改过的学生成绩
+        for (const student of modifiedStudents) {
+          try {
+            const studentId = student.student_id;
+            
+            // 确保成绩值是有效的数字
+            const dailyScore = Number(parseFloat(student.daily_score) || 0);
+            const examinationScore = Number(parseFloat(student.examination_score) || 0);
+            
+            console.log(`正在为学生 ${studentId} (${student.student_name}) 保存成绩: 平时成绩=${dailyScore}, 考试成绩=${examinationScore}`);
+            
+            // 使用请求体方式，确保是数字类型
+            const apiUrl = `${this.host}/api/teachers/${this.userId}/courses/${this.selectedCourse}/students/${studentId}/score`;
+            console.log(`请求URL: ${apiUrl}`);
+            
+            const scoreData = {
+              dailyScore: dailyScore,
+              examinationScore: examinationScore
+            };
+            
+            console.log('请求数据:', JSON.stringify(scoreData));
+            
+            // 统一使用JSON格式请求体
+            const response = await axios.put(apiUrl, scoreData, {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              timeout: 10000
+            });
+            
+            console.log(`学生 ${studentId} 响应状态:`, response.status);
+            console.log(`学生 ${studentId} 响应数据:`, response.data);
+            
+            // 检查响应状态
+            if (response.status === 200 && response.data && response.data.code === 200) {
+              successStudents.push(student);
+              student.hasScore = true;
+              student.isEditing = false;
+            } else {
+              // 处理错误情况
+              const errorMessage = response.data ? response.data.message || '未知错误' : '服务器无响应';
+              failedStudents.push({
+                student,
+                error: errorMessage,
+                status: response.status,
+                details: response.data ? response.data.message || '' : ''
+              });
+              console.error(`学生 ${studentId} 成绩保存失败:`, errorMessage);
+            }
+          } catch (error) {
+            console.error(`学生 ${student.student_id} (${student.student_name}) 成绩保存异常:`, error);
+            
+            // 详细记录错误信息
+            const errorDetails = {
+              student,
+              error: error.message || '未知错误',
+              details: error.response ? (error.response.data ? error.response.data.message : '') : '',
+              status: error.response ? error.response.status : null,
+              fullError: {
+                message: error.message,
+                name: error.name,
+                stack: error.stack,
+                config: error.config,
+                code: error.code,
+                status: error.response ? error.response.status : null
+              }
+            };
+            
+            // 记录详细错误信息
+            console.error('详细错误信息:', JSON.stringify(errorDetails));
+            
+            failedStudents.push(errorDetails);
+          }
+        }
         
-        const submitData = this.tableData.map(student => ({
-          student_id: student.student_id,
-          daily_score: student.daily_score,
-          examination_score: student.examination_score
-        }));
-        
-        console.log('提交的成绩数据:', submitData);
-        
-        const response = await axios.post(apiUrl, submitData);
-        
-        if (response.data.code === 200) {
+        // 处理结果
+        if (failedStudents.length === 0) {
+          // 全部成功
           this.$message.success('成绩保存成功');
-          
-          this.tableData.forEach(student => {
-            student.hasScore = true;
-            student.isEditing = false;
-          });
-          
           this.saveOriginalScores();
+        } else if (successStudents.length === 0) {
+          // 全部失败
+          this.$message.error('所有学生成绩保存失败，请重试');
+          
+          // 显示具体错误信息
+          const firstError = failedStudents[0];
+          if (firstError) {
+            // 记录完整错误信息到控制台
+            console.error('详细错误信息:', JSON.stringify(firstError));
+            
+            // 根据错误类型提供不同的提示信息
+            if (firstError.error.includes('TooManyResultsException')) {
+              this.$message.error('数据库查询错误: 存在多条课程记录，请联系系统管理员');
+            } else if (firstError.error.includes('未找到学生') && firstError.error.includes('选修课程')) {
+              this.$message.error('无法保存成绩: 系统中找不到学生选修该课程的记录');
+              this.$message.warning('提示: 请确认学生已选修该课程，并刷新页面后再试');
+            } else if (firstError.error.includes('未找到课程')) {
+              this.$message.error('无法保存成绩: 系统中找不到对应的课程');
+              this.$message.warning('提示: 请刷新页面或重新选择课程后再试');
+            } else if (firstError.error.includes('ReflectionException')) {
+              this.$message.error('数据库反射错误: 请联系系统管理员');
+              this.$message.warning('提示: 系统内部错误，可能是参数格式不正确');
+            } else if (firstError.status >= 400) {
+              this.$message.error(`服务器错误 (${firstError.status}): 请联系系统管理员`);
+            } else {
+              this.$message.error(`错误详情: ${firstError.error || '未知错误'}`);
+            }
+            
+            // 尝试显示HTTP状态信息
+            if (firstError.status) {
+              this.$message.warning(`HTTP状态码: ${firstError.status}`);
+            }
+          }
         } else {
-          this.$message.error(`成绩保存失败: ${response.data.message || '未知错误'}`);
+          // 部分成功，部分失败
+          this.$message.warning(`成功保存了 ${successStudents.length} 名学生的成绩，${failedStudents.length} 名学生保存失败`);
+          
+          // 显示部分失败学生的信息
+          const failedNames = failedStudents.slice(0, 3).map(f => f.student.student_name || f.student.student_id).join('、');
+          this.$message.error(`保存失败的学生包括: ${failedNames}${failedStudents.length > 3 ? '等' : ''}`);
+          
+          // 显示第一个错误的详细信息
+          console.error('详细错误信息:', JSON.stringify(failedStudents[0]));
+          this.$message.error(`错误详情: ${failedStudents[0].error || '未知错误'}`);
+          
+          // 保存部分成功的数据
+          this.saveOriginalScores();
         }
       } catch (error) {
-        console.error('成绩保存失败:', error);
+        console.error('成绩保存过程中发生错误:', error);
+        if (error.stack) {
+          console.error('错误堆栈:', error.stack);
+        }
         this.$message.error('成绩保存失败，请稍后重试');
       } finally {
         this.submitting = false;

@@ -1,7 +1,6 @@
-
 package com.example.project.mapper;
 
-import com.example.project.entity.SelCourses;
+import com.example.project.entity.Teachers;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -10,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author ge
- * @since 2023-10-24
+ * @since 2023-10-23
  */
-public interface SelCoursesMapper extends BaseMapper<SelCourses> {
+public interface TeacherMapper extends BaseMapper<Teachers> {
 
 }

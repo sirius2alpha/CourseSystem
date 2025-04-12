@@ -5,14 +5,27 @@ server:
 
 spring:
   datasource:
-#    url: jdbc:mysql://localhost:3306/project?serverTimezone=UTC
-    url: jdbc:mysql://localhost:3306/course-system?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/course-system?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
     username: sirius
     password: 132239
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 mybatis-plus:
   configuration:
+    map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.example.project.entity
   global-config:
     db-config:
       id-type: auto
+      
+logging:
+  level:
+    com.example.project.mapper: debug
+    org.springframework.jdbc.core: debug
+  file:
+    name: logs/spring-boot-app.log
